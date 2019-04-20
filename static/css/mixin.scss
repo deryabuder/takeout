@@ -1,0 +1,11 @@
+@mixin no-wrap {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@mixin bg-img($name) {
+  background-image: url("/static/img/" + $name + "@2x.png");
+  @media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3) {
+    background-image: url("/static/img/" + $name + "@3x.png");
+  }
+}
