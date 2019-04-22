@@ -9,12 +9,12 @@
           <div class="discount"><span class="discount-img"></span><span class="discount-content">在线满28减5，满50减10</span></div>
         </div>
       </div>
-      <div class="discount-num">5个 &gt;</div>
+      <div class="discount-num">5个<i class="iconfont icon-right"></i></div>
     </div>
     <router-link to="/goods/notice" class="notice">
       <span class="notice-img"/>
       <span class="notice-content">粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方</span>
-      <span>&gt;</span>
+      <i class="iconfont icon-right"></i>
     </router-link>
     <!-- <router-view/> -->
   </div>
@@ -106,6 +106,10 @@ export default {
       color: #fff;
       font-weight: 200;
       border-radius: 12px;
+      .icon-right {
+        padding-left: 4px;
+        font-size: 8px;
+      }
     }
   }
   .notice {
@@ -113,6 +117,7 @@ export default {
     align-items: center;
     justify-content: space-between;
     height: 28px;
+    line-height: 28px;
     padding: 0 12px;
     background-color: rgba(7, 17,27, 0.2);
     .notice-img {
@@ -130,6 +135,10 @@ export default {
       font-weight: 200;
       color: #fff;
       @include no-wrap;
+    }
+    .icon-right {
+      font-size: 8px;
+      color: #fff;
     }
   }
 }

@@ -19,7 +19,7 @@ export default {
 .score {
   .star {
     display: inline-block;
-    padding: 0 10px;
+    padding-left: 2px;
     height: 24px;
     width: 24px;
     @include bg-img("star/" + "star48_on");
