@@ -1,126 +1,46 @@
 <template>
   <div class="food">
-    <img class="food-img" src="../../static/img/food/food.jpg"/>
+    <img class="food-img" :src="good.image"/>
     <div class="food-info">
       <div class="food-name">
-        皮蛋瘦肉粥
+        {{good.name}}
       </div>
       <div class="food-sale">
-        <span class="num">月售1132份</span>
-        <span class="rate">好评率100%</span>
+        <span class="num">月售{{good.sellCount}}份</span>
+        <span class="rate">好评率{{good.rating}}%</span>
       </div>
       <div class="food-price">
         <div class="price">
-          <span class="current-price">￥<span>24</span></span>
-          <span class="previous-price">￥28</span>
+          <span class="current-price">￥<span>{{good.price}}</span></span>
+          <span class="previous-price" v-if="good.oldPrice">￥{{good.oldPrice}}</span>
         </div>
         <div class="button">加入购物车</div>
       </div>
     </div>
-    <div class="food-introduction">
+    <div class="food-introduction" v-if="good.info">
       <div class="title">商品介绍</div>
-      <p class="introduction">皮蛋瘦肉粥是一种广东省的地方传统著名小吃。皮蛋瘦肉粥营养丰富，以切成小块的皮蛋及咸瘦肉为配料。不同地区的配料有所不同，有人会在进食前加上香油及葱花，或者加葱花及薄脆。</p>
+      <p class="introduction">{{good.info}}</p>
     </div>
     <div class="food-ratings">
       <div class="filter-wrapper">
         <div class="title">商品评价</div>
-        <ratings-filter class="filter"></ratings-filter>
+        <ratings-filter class="filter" :ratings = "good.ratings" @change="changeRating"
+        :ratingsNum="ratingsNum" :ratingsLikeNum="ratingsLikeNum" :ratingsUnlikeNum="ratingsUnlikeNum"></ratings-filter>
       </div>
       <ul class="ratings-list">
-        <li class="ratings-item">
+        <li class="ratings-item" v-for="(item, index) in currentRatings" :key="index">
           <div class="rating-info">
             <div class="time">
-              <span class="date">2016-07-07</span>
-              <span class="datetime">12:34</span>
+              <span class="date">{{formatDate(item.rateTime)}}</span>
             </div>
             <div class="user-info">
-              <span class="tel">3*******4</span>
-              <img class="avatar"/>
+              <span class="tel">{{item.username}}</span>
+              <img class="avatar" :src="item.avatar"/>
             </div>
           </div>
           <div class="rating-content">
-            <span class="praise"></span>
-            <span class="content">太少了，不够一个人吃！！</span>
-          </div>
-        </li>
-        <li class="ratings-item">
-          <div class="rating-info">
-            <div class="time">
-              <span class="date">2016-07-07</span>
-              <span class="datetime">12:34</span>
-            </div>
-            <div class="user-info">
-              <span class="tel">3*******4</span>
-              <img class="avatar" src="../../static/img/ratings/avatar.png"/>
-            </div>
-          </div>
-          <div class="rating-content">
-            <span class="praise"></span>
-            <span class="content">太少了，不够一个人吃！！</span>
-          </div>
-        </li>
-        <li class="ratings-item">
-          <div class="rating-info">
-            <div class="time">
-              <span class="date">2016-07-07</span>
-              <span class="datetime">12:34</span>
-            </div>
-            <div class="user-info">
-              <span class="tel">3*******4</span>
-              <img class="avatar"/>
-            </div>
-          </div>
-          <div class="rating-content">
-            <span class="praise"></span>
-            <span class="content">太少了，不够一个人吃！！</span>
-          </div>
-        </li>
-        <li class="ratings-item">
-          <div class="rating-info">
-            <div class="time">
-              <span class="date">2016-07-07</span>
-              <span class="datetime">12:34</span>
-            </div>
-            <div class="user-info">
-              <span class="tel">3*******4</span>
-              <img class="avatar"/>
-            </div>
-          </div>
-          <div class="rating-content">
-            <span class="praise"></span>
-            <span class="content">太少了，不够一个人吃！！</span>
-          </div>
-        </li>
-        <li class="ratings-item">
-          <div class="rating-info">
-            <div class="time">
-              <span class="date">2016-07-07</span>
-              <span class="datetime">12:34</span>
-            </div>
-            <div class="user-info">
-              <span class="tel">3*******4</span>
-              <img class="avatar"/>
-            </div>
-          </div>
-          <div class="rating-content">
-            <span class="praise"></span>
-            <span class="content">太少了，不够一个人吃！！</span>
-          </div>
-        </li>
-        <li class="ratings-item">
-          <div class="rating-info">
-            <div class="time">
-              <span class="date">2016-07-07</span>
-              <span class="datetime">12:34</span>
-            </div>
-            <div class="user-info">
-              <span class="tel">3*******4</span>
-              <img class="avatar"/>
-            </div>
-          </div>
-          <div class="rating-content">
-            <span class="praise"></span>
-            <span class="content">太少了，不够一个人吃！！</span>
+            <i :class="['iconfont', item.rateType ? 'icon-like-fill':'icon-unlike-fill']"></i>
+            <span class="content" v-if="item.text">{{item.text}}</span>
           </div>
         </li>
       </ul>
@@ -130,9 +50,51 @@
 
 <script>
 import RatingsFilter from './RatingsFilter'
+import { getGoodsData } from '../api/api'
+import { formatDate } from '../../static/js/util'
 export default {
+  data () {
+    return {
+      good: {},
+      currentRatings: [],
+      ratingsNum: 0,
+      ratingsLikeNum: 0,
+      ratingsUnlikeNum: 0
+    }
+  },
   components: {
     RatingsFilter
+  },
+  created () {
+    getGoodsData().then(res => {
+      res = res.data
+      var goods = res.result
+      var index = this.$route.params.index
+      var num = this.$route.params.num
+      this.good = goods[index].foods[num]
+      this.currentRatings = this.good.ratings
+      this.ratingsInfo(this.good.ratings)
+    })
+  },
+  methods: {
+    changeRating (currentRatings) {
+      this.currentRatings = currentRatings
+    },
+    formatDate (time) {
+      var date = new Date(time)
+      return formatDate(date, 'yyyy-MM-dd hh:mm')
+    },
+    ratingsInfo (ratings) {
+      this.ratingsNum = ratings.length
+      var ratingsLike = ratings.filter((value, index) => {
+        return value.rateType === 1
+      })
+      this.ratingsLikeNum = ratingsLike.length
+      var ratingsUnlike = ratings.filter((value, index) => {
+        return value.rateType === 0
+      })
+      this.ratingsUnlikeNum = ratingsUnlike.length
+    }
   }
 }
 </script>
@@ -180,6 +142,7 @@ export default {
         }
         .previous-price {
           color: rgb(147,153,159);
+          text-decoration: line-through;
         }
       }
       .button {
@@ -257,6 +220,19 @@ export default {
         }
       }
       .rating-content {
+        display: flex;
+        align-items: center;
+        .iconfont {
+          font-size: 12px;
+          line-height: 24px;
+          padding-right: 4px;
+        }
+        .icon-like-fill {
+          color: rgb(0, 160,220);
+        }
+        .icon-unlike-fill {
+          color: rgb(183, 187,191);
+        }
         .content {
           font-size: 12px;
           line-height: 16px;

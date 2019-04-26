@@ -1,19 +1,19 @@
 <template>
   <div class="header">
     <div class="seller-header clearfix">
-      <img class="seller-img" src="../../img/header-img.png"/>
+      <img class="seller-img" :src="seller.avatar"/>
       <div class="seller-info">
-        <div class="title clearfix"><span class="seller-img"/><span class="seller-name">粥品香坊（大运村）</span></div>
-        <div class="delivery">蜂鸟专送 / 30分钟送达</div>
+        <div class="title clearfix"><span class="seller-img"/><span class="seller-name">{{seller.name}}</span></div>
+        <div class="delivery">{{seller.description}} / {{seller.deliveryTime}}分钟送达</div>
         <div class="discount-wrapper">
-          <div class="discount"><span class="discount-img"></span><span class="discount-content">在线满28减5，满50减10</span></div>
+          <div class="discount"><span :class="['discount-img', icon]"></span><span class="discount-content">{{des}}</span></div>
         </div>
       </div>
       <div class="discount-num">5个<i class="iconfont icon-right"></i></div>
     </div>
-    <router-link to="/goods/notice" class="notice">
+    <router-link to="/notice" class="notice">
       <span class="notice-img"/>
-      <span class="notice-content">粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方粥品香方</span>
+      <span class="notice-content">{{seller.bulletin}}</span>
       <i class="iconfont icon-right"></i>
     </router-link>
     <!-- <router-view/> -->
@@ -21,10 +21,27 @@
 </template>
 
 <script>
+import { getSellerData } from '../api/api'
 export default {
+  data () {
+    return {
+      seller: {},
+      icon: '',
+      des: ''
+    }
+  },
+  created () {
+    getSellerData().then(res => {
+      res = res.data
+      this.seller = res.result
+      this.icon = this.iconMap(this.seller.supports[0].type)
+      this.des = this.seller.supports[0].description
+    })
+  },
   methods: {
-    notice () {
-      this.$router.push('/goods/notice')
+    iconMap (index) {
+      var iconArr = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
+      return iconArr[index]
     }
   }
 }
@@ -80,9 +97,23 @@ export default {
           .discount-img {
             width: 12px;
             height: 12px 12px;
-            @include bg-img("/header/"+"decrease_1");
             background-size: 12px;
             background-repeat: no-repeat;
+            &.decrease {
+              @include bg-img("header/" + "decrease_2");
+            }
+            &.discount {
+              @include bg-img("header/" + "discount_2");
+            }
+            &.special {
+              @include bg-img("header/" + "special_2");
+            }
+            &.invoice {
+              @include bg-img("header/" + "invoice_2");
+            }
+            &.guarantee {
+              @include bg-img("header/" + "guarantee_2");
+            }
           }
           .discount-content {
             flex: 1;

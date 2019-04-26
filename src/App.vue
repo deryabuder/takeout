@@ -2,7 +2,7 @@
   <div id="app">
     <seller-header></seller-header>
     <tab></tab>
-    <router-view/>
+    <router-view class="router-view"/>
     <seller-footer/>
   </div>
 </template>
@@ -26,5 +26,8 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+.router-view {
+  margin-bottom: 50px;
 }
 </style>

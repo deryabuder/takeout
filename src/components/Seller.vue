@@ -3,11 +3,11 @@
     <div class="seller-introduction">
       <div class="introduction-top">
         <div class="seller-des">
-          <div class="title">粥品香坊（大运村）</div>
+          <div class="title">{{seller.name}}</div>
           <div class="sales-info">
-            <star class="star"></star>
-            <span class="ratings-num">(661)</span>
-            <span class="sales-num">月售690单</span>
+            <star class="star" :star="seller.score"></star>
+            <span class="ratings-num">({{seller.ratingCount}})</span>
+            <span class="sales-num">月售{{seller.sellCount}}单</span>
           </div>
         </div>
         <div class="collection">
@@ -18,76 +18,64 @@
       <div class="introduction-bottom">
         <div class="introduction-content">
           <div class="des">起送价</div>
-          <div class="num">20<span class="unit">元</span></div>
+          <div class="num">{{seller.minPrice}}<span class="unit">元</span></div>
         </div>
         <div class="introduction-content">
           <div class="des">商家配送</div>
-          <div class="num">4<span class="unit">元</span></div>
+          <div class="num">{{seller.deliveryPrice}}<span class="unit">元</span></div>
         </div>
         <div class="introduction-content last-introduction-content">
           <div class="des">平均配送时间</div>
-          <div class="num">39<span class="unit">分钟</span></div>
+          <div class="num">{{seller.deliveryTime}}<span class="unit">分钟</span></div>
         </div>
       </div>
     </div>
     <div class="seller-notices">
       <div class="notices-title">
         <div class="title">公告与活动</div>
-        <p class="content">粥品香坊其烹饪粥料的秘方 源于中国千年古法,在融和现代+制作工艺,由世界烹饪大师屈浩先生领衔研发。坚守纯天然、0添加的良心品质深的消费者青睐,发展至今成为粥类弓|领品牌。是2008年 奥运会和2013年园博会指定餐饮服务商。</p>
+        <p class="content">{{seller.bulletin}}</p>
       </div>
-      <div class="notices-content">
-        <span class="icon"></span>
-        <span class="des">单人精彩赛</span>
-      </div>
-      <div class="notices-content">
-        <span class="icon"></span>
-        <span class="des">单人精彩赛</span>
-      </div>
-      <div class="notices-content">
-        <span class="icon"></span>
-        <span class="des">单人精彩赛</span>
-      </div>
-      <div class="notices-content">
-        <span class="icon"></span>
-        <span class="des">单人精彩赛</span>
-      </div>
-      <div class="notices-content">
-        <span class="icon"></span>
-        <span class="des">单人精彩赛</span>
-      </div>
-      <div class="notices-content">
-        <span class="icon"></span>
-        <span class="des">单人精彩赛</span>
-      </div>
-      <div class="notices-content">
-        <span class="icon"></span>
-        <span class="des">单人精彩赛</span>
+      <div v-for="(item, index) in seller.supports" :key="index" class="notices-content">
+        <span :class="['icon',iconMap(item.type)]" ></span>
+        <span class="des">{{item.description}}</span>
       </div>
     </div>
     <div class="seller-imgs">
       <div class="title">商家实景</div>
       <div class="imgs">
-        <img class="img" src="../../static/img/seller/seller.png"/>
-        <img class="img" src="../../static/img/seller/seller.png"/>
-        <img class="img" src="../../static/img/seller/seller.png"/>
-        <img class="img" src="../../static/img/seller/seller.png"/>
+        <img class="img" v-for="(item, index) in seller.pics" :src="item" :key="index"/>
       </div>
     </div>
     <div class="seller-info">
       <div class="title">商家信息</div>
-      <div class="info">该商家支持开发票,请在下单时填写好发票抬头</div>
-      <div class="info">品类:其他菜系、包子粥店</div>
-      <div class="info">地址:北京市昌平区回龙观西大街龙观置业大厦底商B座102单元1340</div>
-      <div class="info">营业时间: 10:00 - 20:30</div>
+      <div class="info" v-for="(item, index) in seller.infos" :key="index">{{item}}</div>
     </div>
   </div>
 </template>
 
 <script>
 import Star from './Star'
+import { getSellerData } from '../api/api'
 export default {
+  data () {
+    return {
+      seller: {}
+    }
+  },
   components: {
     Star
+  },
+  created () {
+    getSellerData().then(res => {
+      res = res.data
+      this.seller = res.result
+    })
+  },
+  methods: {
+    iconMap (index) {
+      var iconArr = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
+      return iconArr[index]
+    }
   }
 }
 </script>
@@ -161,6 +149,7 @@ export default {
           font-size: 10px;
           line-height: 10px;
           color: rgb(147,153,159);
+          padding-bottom: 4px;
         }
         .num {
           font-size: 24px;
@@ -206,10 +195,24 @@ export default {
       .icon {
         width: 16px;
         height: 16px;
-        @include bg-img("header/" + "decrease_2");
         background-size: 16px;
         background-repeat: no-repeat;
         padding-right: 6px;
+        &.decrease {
+          @include bg-img("header/" + "decrease_2");
+        }
+        &.discount {
+          @include bg-img("header/" + "discount_2");
+        }
+        &.special {
+          @include bg-img("header/" + "special_2");
+        }
+        &.invoice {
+          @include bg-img("header/" + "invoice_2");
+        }
+        &.guarantee {
+          @include bg-img("header/" + "guarantee_2");
+        }
       }
       .des {
         flex: 1;
@@ -233,6 +236,7 @@ export default {
     .imgs {
       display: flex;
       .img {
+        // flex: 1;
         width: 120px;
         height: 90px;
         padding-right: 6px;
@@ -241,6 +245,7 @@ export default {
   }
   .seller-info {
     padding: 16px;
+    padding-bottom: 0;
     margin-top: 16px;
     border-top: 2px solid rgb(229,229,229);
     border-bottom: 2px solid rgb(229,229,229);

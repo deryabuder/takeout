@@ -2,145 +2,44 @@
   <div class="ratings">
     <div class="score-wrapper clearfix">
       <div class="score-total">
-        <div class="score">3.9</div>
+        <div class="score">{{seller.score}}</div>
         <div class="score-des">综合评分</div>
-        <div class="score-info">高于周边商家89.89%</div>
+        <div class="score-info">高于周边商家{{seller.rankRate}}%</div>
       </div>
       <div class="score-list">
         <div class="score-item">
           <span class="score-item-des">服务态度</span>
-          <star class="star"></star>
-          <span class="score-num">3.9</span>
+          <star class="star" :star="seller.serviceScore"></star>
+          <span class="score-num">{{seller.serviceScore}}</span>
         </div>
         <div class="score-item">
-          <span class="score-item-des">服务态度</span>
-          <star class="star"></star>
-          <span class="score-num">3.9</span>
+          <span class="score-item-des">食物积分</span>
+          <star class="star" :star="seller.foodScore"></star>
+          <span class="score-num">{{seller.foodScore}}</span>
         </div>
         <div class="score-item">
           <span class="score-item-des">送达时间</span>
-          <span class="time">44分钟</span>
+          <span class="time">{{seller.deliveryTime}}分钟</span>
         </div>
       </div>
     </div>
-    <div class="rating-wrapper"><ratings-filter/></div>
+    <div class="rating-wrapper">
+      <ratings-filter :ratings = "ratings" @change="changeRating"
+      :ratingsNum="ratingsNum" :ratingsLikeNum="ratingsLikeNum" :ratingsUnlikeNum="ratingsUnlikeNum"/>
+    </div>
     <ul class="ratings-list">
-      <li class="rating-item">
-        <img class="user-avatar" src="../../static/img/ratings/avatar.png">
+      <li class="rating-item" v-for="(item, index) in currentRatings" :key="index">
+        <img class="user-avatar" :src="item.avatar">
         <div class="ratings-wrapper">
-          <div class="user-name">聚**家</div>
+          <div class="user-name">{{item.username}}</div>
           <div class="star-info">
-            <star class="star"></star>
-            <span class="time">80分钟送达</span>
+            <star class="star" :star="item.score"></star>
+            <span class="time" v-if="item.deliveryTime">{{item.deliveryTime}}分钟送达</span>
           </div>
-          <div class="ratings-content">油条凉了。油条凉了。油条凉了。油条凉了。油条凉了。油条凉了。</div>
-          <div class="foods clearfix">
-            <span class="like-type"></span>
-            <span class="food-name">大王香菇卤肉饭</span>
-            <span class="food-name">大王香菇卤肉饭</span>
-            <span class="food-name">大王香菇卤肉饭</span>
-          </div>
-        </div>
-      </li>
-      <li class="rating-item">
-        <img class="user-avatar" src="../../static/img/ratings/avatar.png">
-        <div class="ratings-wrapper">
-          <div class="user-name">聚**家</div>
-          <div class="star-info">
-            <star class="star"></star>
-            <span class="time">80分钟送达</span>
-          </div>
-          <div class="ratings-content">油条凉了。油条凉了。油条凉了。油条凉了。油条凉了。油条凉了。</div>
-          <div class="foods clearfix">
-            <span class="like-type"></span>
-            <span class="food-name">大王香菇卤肉饭</span>
-            <span class="food-name">大王香菇卤肉饭</span>
-            <span class="food-name">大王香菇卤肉饭</span>
-          </div>
-        </div>
-      </li>
-      <li class="rating-item">
-        <img class="user-avatar" src="../../static/img/ratings/avatar.png">
-        <div class="ratings-wrapper">
-          <div class="user-name">聚**家</div>
-          <div class="star-info">
-            <star class="star"></star>
-            <span class="time">80分钟送达</span>
-          </div>
-          <div class="ratings-content">油条凉了。油条凉了。油条凉了。油条凉了。油条凉了。油条凉了。</div>
-          <div class="foods clearfix">
-            <span class="like-type"></span>
-            <span class="food-name">大王香菇卤肉饭</span>
-            <span class="food-name">大王香菇卤肉饭</span>
-            <span class="food-name">大王香菇卤肉饭</span>
-          </div>
-        </div>
-      </li>
-      <li class="rating-item">
-        <img class="user-avatar" src="../../static/img/ratings/avatar.png">
-        <div class="ratings-wrapper">
-          <div class="user-name">聚**家</div>
-          <div class="star-info">
-            <star class="star"></star>
-            <span class="time">80分钟送达</span>
-          </div>
-          <div class="ratings-content">油条凉了。油条凉了。油条凉了。油条凉了。油条凉了。油条凉了。</div>
-          <div class="foods clearfix">
-            <span class="like-type"></span>
-            <span class="food-name">大王香菇卤肉饭</span>
-            <span class="food-name">大王香菇卤肉饭</span>
-            <span class="food-name">大王香菇卤肉饭</span>
-          </div>
-        </div>
-      </li>
-      <li class="rating-item">
-        <img class="user-avatar" src="../../static/img/ratings/avatar.png">
-        <div class="ratings-wrapper">
-          <div class="user-name">聚**家</div>
-          <div class="star-info">
-            <star class="star"></star>
-            <span class="time">80分钟送达</span>
-          </div>
-          <div class="ratings-content">油条凉了。油条凉了。油条凉了。油条凉了。油条凉了。油条凉了。</div>
-          <div class="foods clearfix">
-            <span class="like-type"></span>
-            <span class="food-name">大王香菇卤肉饭</span>
-            <span class="food-name">大王香菇卤肉饭</span>
-            <span class="food-name">大王香菇卤肉饭</span>
-          </div>
-        </div>
-      </li>
-      <li class="rating-item">
-        <img class="user-avatar" src="../../static/img/ratings/avatar.png">
-        <div class="ratings-wrapper">
-          <div class="user-name">聚**家</div>
-          <div class="star-info">
-            <star class="star"></star>
-            <span class="time">80分钟送达</span>
-          </div>
-          <div class="ratings-content">油条凉了。油条凉了。油条凉了。油条凉了。油条凉了。油条凉了。</div>
-          <div class="foods clearfix">
-            <span class="like-type"></span>
-            <span class="food-name">大王香菇卤肉饭</span>
-            <span class="food-name">大王香菇卤肉饭</span>
-            <span class="food-name">大王香菇卤肉饭</span>
-          </div>
-        </div>
-      </li>
-      <li class="rating-item">
-        <img class="user-avatar" src="../../static/img/ratings/avatar.png">
-        <div class="ratings-wrapper">
-          <div class="user-name">聚**家</div>
-          <div class="star-info">
-            <star class="star"></star>
-            <span class="time">80分钟送达</span>
-          </div>
-          <div class="ratings-content">油条凉了。油条凉了。油条凉了。油条凉了。油条凉了。油条凉了。</div>
-          <div class="foods clearfix">
-            <span class="like-type"></span>
-            <span class="food-name">大王香菇卤肉饭</span>
-            <span class="food-name">大王香菇卤肉饭</span>
-            <span class="food-name">大王香菇卤肉饭</span>
+          <div class="ratings-content">{{item.text}}</div>
+          <div class="foods clearfix" v-if="item.recommend.length">
+            <i :class="['iconfont', item.rateType ? 'icon-like-fill': 'icon-unlike-fill']"></i>
+            <span v-for="(recommend, index) in item.recommend" :key="index" class="food-name">{{recommend}}</span>
           </div>
         </div>
       </li>
@@ -151,10 +50,50 @@
 <script>
 import Star from './Star'
 import RatingsFilter from './RatingsFilter'
+import { getRatingsData, getSellerData } from '../api/api'
 export default {
+  data () {
+    return {
+      ratings: [],
+      seller: {},
+      currentRatings: [],
+      ratingsNum: 0,
+      ratingsLikeNum: 0,
+      ratingsUnlikeNum: 0
+    }
+  },
   components: {
     Star,
     RatingsFilter
+  },
+  created () {
+    getRatingsData().then(res => {
+      res = res.data
+      this.ratings = res.result
+      this.currentRatings = this.ratings
+      this.ratingsInfo(this.ratings)
+    })
+    getSellerData().then(res => {
+      res = res.data
+      this.seller = res.result
+      console.log(this.seller)
+    })
+  },
+  methods: {
+    changeRating (currentRatings) {
+      this.currentRatings = currentRatings
+    },
+    ratingsInfo (ratings) {
+      this.ratingsNum = ratings.length
+      var ratingsLike = ratings.filter((value, index) => {
+        return value.rateType === 1
+      })
+      this.ratingsLikeNum = ratingsLike.length
+      var ratingsUnlike = ratings.filter((value, index) => {
+        return value.rateType === 0
+      })
+      this.ratingsUnlikeNum = ratingsUnlike.length
+    }
   }
 }
 </script>
@@ -170,7 +109,7 @@ export default {
     border-bottom: 1px solid rgba(7,17,27,0.1);
     .score-total {
       float: left;
-      flex: 1;
+      padding: 0 10px;
       border-right: 1px solid rgba(7,17,27,0.1);
       text-align: center;
       .score {
@@ -193,8 +132,8 @@ export default {
       }
     }
     .score-list {
-      float: left;
-      padding: 0 24px;
+      float: right;
+      padding: 0 20px;
       .score-item {
         display: flex;
         align-items: center;
@@ -265,15 +204,25 @@ export default {
         .ratings-content {
           font-size: 12px;
           line-height: 18px;
-          padding-bottom: 8px;
         }
         .foods {
-          .like-type {
-            float:left;
+          display: flex;
+          align-items: center;
+          padding-top: 8px;
+          text-align: center;
+          flex-wrap: wrap;
+          .iconfont {
+            font-size: 12px;
+            line-height: 16px;
+          }
+          .icon-like-fill {
+            color: rgb(0, 160,220);
+          }
+          .icon-unlike-fill {
+            color: rgb(183, 187,191);
           }
           .food-name {
             @include no-wrap;
-            float: left;
             color: rgb(147,153,159);
             font-size: 9px;
             line-height: 16px;

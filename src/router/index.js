@@ -12,15 +12,8 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '/',
-      component: Goods,
-      redirect: '/goods',
-      children: [
-        {
-          path: 'notice',
-          component: Notice
-        }
-      ]
+      path: '/goods',
+      component: Goods
     },
     {
       path: '/ratings',
@@ -31,8 +24,13 @@ export default new Router({
       component: Seller
     },
     {
-      path: '/food',
-      component: Food
+      path: '/food/:index/:num',
+      component: Food,
+      name: 'food'
+    },
+    {
+      path: '/notice',
+      component: Notice
     }
   ]
 })

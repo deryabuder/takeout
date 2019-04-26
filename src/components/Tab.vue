@@ -18,6 +18,7 @@ export default {
   align-items: center;
   text-align: center;
   height: 40px;
+  box-sizing: border-box;
   border-bottom: 1px solid rgba(7,17,27,0.1);
   .tab-item {
     flex: 1;
