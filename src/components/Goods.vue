@@ -1,53 +1,67 @@
 <template>
   <div class="goods">
-    <ul class="goods-left">
+    <ul class="goods-left wrapper" ref="wrapper">
       <li class="left-item" v-for="(item, index) in goods" :key="index">
         <span v-if="item.type >= 0" :class="['icon',iconMap(item.type)]"></span>
         <span class="left-item-des">{{item.name}}</span>
       </li>
     </ul>
-    <div class="goods-right">
-    <dl class="goods-right-content" v-for="(item, index) in goods" :key="index">
-      <dt class="foods-type">{{item.name}}</dt>
-      <dd v-for="(food, num) in item.foods" :key="num" class="foods-item" @click="toFood(index, num)">
-        <img :src="food.icon" class="food-avatar"/>
-        <div class="food-info">
-          <div class="name">{{food.name}}</div>
-          <div class="info" v-if="food.description">{{food.description}}</div>
-          <div class="food-des clearfix">
-            <span class="sell-count">月销{{food.sellCount}}份</span>
-            <span class="rating">好评率{{food.rating}}%</span>
-          </div>
-          <div class="price-info">
-            <div class="price">
-              <span class="current-price">￥<span class="num">{{food.price}}</span></span>
-              <span class="old-price" v-if="food.oldPrice">￥<span class="num">{{food.oldPrice}}</span></span>
+    <div class="goods-right wrapper">
+      <dl class="goods-right-content" v-for="(item, index) in goods" :key="index">
+        <dt class="foods-type">{{item.name}}</dt>
+        <dd v-for="(food, num) in item.foods" :key="num" class="foods-item" @click="toFood(index, num)">
+          <img :src="food.icon" class="food-avatar"/>
+          <div class="food-info">
+            <div class="name">{{food.name}}</div>
+            <div class="info" v-if="food.description">{{food.description}}</div>
+            <div class="food-des clearfix">
+              <span class="sell-count">月销{{food.sellCount}}份</span>
+              <span class="rating">好评率{{food.rating}}%</span>
             </div>
-            <div class="count clearfix">
-              <i class="iconfont icon-minus-circle"></i>
-              <span class="num">0</span>
-              <i class="iconfont icon-plus-circle-fill"></i>
+            <div class="price-info">
+              <div class="price">
+                <span class="current-price">￥<span class="num">{{food.price}}</span></span>
+                <span class="old-price" v-if="food.oldPrice">￥<span class="num">{{food.oldPrice}}</span></span>
+              </div>
+              <div class="count clearfix">
+                <i class="iconfont icon-minus-circle"></i>
+                <span class="num">0</span>
+                <i class="iconfont icon-plus-circle-fill"></i>
+              </div>
             </div>
           </div>
-        </div>
-      </dd>
-    </dl>
+        </dd>
+      </dl>
     </div>
+    <seller-footer></seller-footer>
   </div>
 </template>
 
 <script>
 import { getGoodsData } from '../api/api'
+import SellerFooter from './SellerFooter'
+import Bscroll from 'better-scroll'
+
 export default {
   data () {
     return {
-      goods: []
+      goods: [],
+      checkObj: {}
     }
+  },
+  components: {
+    SellerFooter
   },
   created () {
     getGoodsData().then(res => {
       res = res.data
       this.goods = res.result
+      this.$nextTick(() => {
+        this.scroll = new Bscroll(this.$refs.wrapper, {
+          scrollX: true,
+          scrollY: false
+        })
+      })
     })
   },
   methods: {
@@ -79,6 +93,7 @@ export default {
       font-size: 12px;
       line-height: 14px;
       font-weight: 200;
+      box-sizing: border-box;
       border-bottom: 1px solid rgba(7, 17, 27, 0.1);
     }
   }

@@ -176,7 +176,7 @@ export default {
     }
   }
   .close {
-    position: absolute;
+    position: fixed;
     left: 50%;
     transform: translateX(-50%);
     bottom: 32px;

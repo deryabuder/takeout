@@ -40,8 +40,7 @@ export default {
   },
   methods: {
     filterRatings () {
-      console.log(1111111111)
-      this.currentRatings = this.ratings.filter((value, index) => {
+      this.currentRatings = this.isFilter ? this.ratings : this.ratings.filter((value, index) => {
         return value.text !== ''
       })
       this.$emit('change', this.currentRatings)

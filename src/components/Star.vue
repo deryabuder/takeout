@@ -22,6 +22,7 @@ export default {
     }
   },
   created () {
+    console.log(this.star)
     this.initStar()
   },
   methods: {

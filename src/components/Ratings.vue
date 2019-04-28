@@ -24,7 +24,7 @@
       </div>
     </div>
     <div class="rating-wrapper">
-      <ratings-filter :ratings = "ratings" @change="changeRating"
+      <ratings-filter :ratings="ratings" @change="changeRating"
       :ratingsNum="ratingsNum" :ratingsLikeNum="ratingsLikeNum" :ratingsUnlikeNum="ratingsUnlikeNum"/>
     </div>
     <ul class="ratings-list">
@@ -76,7 +76,6 @@ export default {
     getSellerData().then(res => {
       res = res.data
       this.seller = res.result
-      console.log(this.seller)
     })
   },
   methods: {
@@ -208,12 +207,12 @@ export default {
         .foods {
           display: flex;
           align-items: center;
-          padding-top: 8px;
           text-align: center;
           flex-wrap: wrap;
           .iconfont {
             font-size: 12px;
             line-height: 16px;
+            margin-top: 8px;
           }
           .icon-like-fill {
             color: rgb(0, 160,220);
@@ -227,6 +226,7 @@ export default {
             font-size: 9px;
             line-height: 16px;
             padding: 0 6px;
+            margin-top: 8px;
             margin-left: 8px;
             border: 1px solid rgba(7,17,27,0.1);
             border-radius: 1px;

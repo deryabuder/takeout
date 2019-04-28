@@ -42,7 +42,7 @@
     </div>
     <div class="seller-imgs">
       <div class="title">商家实景</div>
-      <div class="imgs">
+      <div class="imgs wrapper" ref="wrapper">
         <img class="img" v-for="(item, index) in seller.pics" :src="item" :key="index"/>
       </div>
     </div>
@@ -56,6 +56,8 @@
 <script>
 import Star from './Star'
 import { getSellerData } from '../api/api'
+import Bscroll from 'better-scroll'
+
 export default {
   data () {
     return {
@@ -69,6 +71,9 @@ export default {
     getSellerData().then(res => {
       res = res.data
       this.seller = res.result
+      this.$nextTick(() => {
+        this.scroll = new Bscroll(this.$refs.wrapper, {})
+      })
     })
   },
   methods: {
@@ -234,6 +239,7 @@ export default {
       padding-bottom: 12px;
     }
     .imgs {
+      width: 100%;
       display: flex;
       .img {
         // flex: 1;
