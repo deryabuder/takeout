@@ -1,6 +1,6 @@
 <template>
   <div class="ratings">
-    <div class="score-wrapper clearfix">
+    <div class="score-wrapper clearfix border-1px">
       <div class="score-total">
         <div class="score">{{seller.score}}</div>
         <div class="score-des">综合评分</div>
@@ -28,7 +28,7 @@
       :ratingsNum="ratingsNum" :ratingsLikeNum="ratingsLikeNum" :ratingsUnlikeNum="ratingsUnlikeNum"/>
     </div>
     <ul class="ratings-list">
-      <li class="rating-item" v-for="(item, index) in currentRatings" :key="index">
+      <li class="rating-item border-1px" v-for="(item, index) in currentRatings" :key="index">
         <img class="user-avatar" :src="item.avatar">
         <div class="ratings-wrapper">
           <div class="user-name">{{item.username}}</div>
@@ -105,7 +105,7 @@ export default {
     display: flex;
     background-color: #fff;
     padding: 18px 0;
-    border-bottom: 1px solid rgba(7,17,27,0.1);
+    @include border-1px(rgba(7,17,27,0.1));
     .score-total {
       float: left;
       padding: 0 10px;
@@ -172,7 +172,7 @@ export default {
     .rating-item {
       padding: 18px 0;
       display: flex;
-      border-bottom: 1px solid rgba(7,17,27,0.1);
+      @include border-1px(rgba(7,17,27,0.1));
       .user-avatar {
         width: 28px;
         height: 28px;

@@ -1,15 +1,16 @@
 <template>
   <div class="goods">
     <ul class="goods-left wrapper" ref="wrapper">
-      <li class="left-item" v-for="(item, index) in goods" :key="index">
-        <span v-if="item.type >= 0" :class="['icon',iconMap(item.type)]"></span>
-        <span class="left-item-des">{{item.name}}</span>
+      <li class="left-item border-1px" v-for="(item, index) in goods" :key="index">
+        <span class="item-des">
+          <span v-if="item.type >= 0" :class="['icon',iconMap(item.type)]"></span>{{item.name}}
+        </span>
       </li>
     </ul>
     <div class="goods-right wrapper">
       <dl class="goods-right-content" v-for="(item, index) in goods" :key="index">
         <dt class="foods-type">{{item.name}}</dt>
-        <dd v-for="(food, num) in item.foods" :key="num" class="foods-item" @click="toFood(index, num)">
+        <dd v-for="(food, num) in item.foods" :key="num" class="foods-item border-1px" @click="toFood(index, num)">
           <img :src="food.icon" class="food-avatar"/>
           <div class="food-info">
             <div class="name">{{food.name}}</div>
@@ -77,7 +78,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+@import '../../static/css/mixin';
 .goods {
   display: flex;
   .goods-left {
@@ -87,14 +88,42 @@ export default {
     padding: 0 12px;
     box-sizing: border-box;
     .left-item {
-      display: flex;
-      align-items: center;
+      display: table;
       height: 54px;
       font-size: 12px;
       line-height: 14px;
       font-weight: 200;
       box-sizing: border-box;
-      border-bottom: 1px solid rgba(7, 17, 27, 0.1);
+      @include border-1px(rgba(7, 17, 27, 0.1));
+      vertical-align: middle;
+      .item-des {
+        display: table-cell;
+        vertical-align: middle;
+        .icon {
+          display: inline-block;
+          vertical-align: top;
+          width: 12px;
+          height: 12px;
+          background-size: 12px;
+          background-repeat: no-repeat;
+          background-position-y: 1px;
+          &.decrease {
+            @include bg-img("header/" + "decrease_2");
+          }
+          &.discount {
+            @include bg-img("header/" + "discount_2");
+          }
+          &.special {
+            @include bg-img("header/" + "special_2");
+          }
+          &.invoice {
+            @include bg-img("header/" + "invoice_2");
+          }
+          &.guarantee {
+            @include bg-img("header/" + "guarantee_2");
+          }
+        }
+      }
     }
   }
   .goods-right {
@@ -113,7 +142,7 @@ export default {
       .foods-item {
         display: flex;
         padding: 18px;
-        border-bottom: 1px solid rgba(7, 17, 27, 0.1);
+        @include border-1px(rgba(7, 17, 27, 0.1));
         .food-avatar {
           padding-right: 10px;
           width: 70px;

@@ -1,6 +1,6 @@
 <template>
   <div class="footer">
-    <router-link tab="div" to="/goods/checklist" class="left">
+    <div tab="div" class="left" @click="showCheckList">
       <div class="cart-wrapper">
         <div class="cart">
           <i class="iconfont icon-cart"></i>
@@ -10,7 +10,7 @@
         <div class="food-cost">￥0</div>
         <div class="delivery-cost">另需配送费￥4元</div>
       </div>
-    </router-link>
+    </div>
     <router-view></router-view>
     <div class="pay-button"><div class="pay">￥20起送</div></div>
   </div>
@@ -18,6 +18,21 @@
 
 <script>
 export default {
+  data () {
+    return {
+      show: false
+    }
+  },
+  methods: {
+    showCheckList () {
+      if (this.show) {
+        this.$router.back()
+      } else {
+        this.$router.push('/goods/checklist')
+      }
+      this.show = !this.show
+    }
+  }
 }
 </script>
 
@@ -41,6 +56,7 @@ export default {
       margin: 0 18px;
       background-color: #f00;
       border-radius: 50%;
+      z-index: 2;
       .cart {
         position: absolute;
         height: 44px;

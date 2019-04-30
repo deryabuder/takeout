@@ -13,6 +13,10 @@ export default new Router({
   // 路由有问题
   routes: [
     {
+      path: '/',
+      redirect: '/goods'
+    },
+    {
       path: '/goods',
       component: Goods,
       children: [

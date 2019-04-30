@@ -1,7 +1,7 @@
 <template>
   <div class="seller">
-    <div class="seller-introduction">
-      <div class="introduction-top">
+    <div class="seller-introduction border-1px">
+      <div class="introduction-top border-1px">
         <div class="seller-des">
           <div class="title">{{seller.name}}</div>
           <div class="sales-info">
@@ -11,8 +11,8 @@
           </div>
         </div>
         <div class="collection">
-          <div class="heart"><i class="iconfont icon-heart-fill"></i></div>
-          <div class="collection-des">已收藏</div>
+          <div class="heart"><i :class="['iconfont', 'icon-heart-fill', collection ? 'collection' : '']" @click="changeCollection"></i></div>
+          <div class="collection-des">{{collection ? "已收藏" : "收藏"}}</div>
         </div>
       </div>
       <div class="introduction-bottom">
@@ -30,25 +30,25 @@
         </div>
       </div>
     </div>
-    <div class="seller-notices">
+    <div class="seller-notices border-1px">
       <div class="notices-title">
         <div class="title">公告与活动</div>
         <p class="content">{{seller.bulletin}}</p>
       </div>
-      <div v-for="(item, index) in seller.supports" :key="index" class="notices-content">
+      <div v-for="(item, index) in seller.supports" :key="index" class="notices-content border-1px">
         <span :class="['icon',iconMap(item.type)]" ></span>
         <span class="des">{{item.description}}</span>
       </div>
     </div>
-    <div class="seller-imgs">
+    <div class="seller-imgs border-1px">
       <div class="title">商家实景</div>
       <div class="imgs wrapper" ref="wrapper">
         <img class="img" v-for="(item, index) in seller.pics" :src="item" :key="index"/>
       </div>
     </div>
-    <div class="seller-info">
+    <div class="seller-info border-1px">
       <div class="title">商家信息</div>
-      <div class="info" v-for="(item, index) in seller.infos" :key="index">{{item}}</div>
+      <div class="info border-1px" v-for="(item, index) in seller.infos" :key="index">{{item}}</div>
     </div>
   </div>
 </template>
@@ -61,7 +61,8 @@ import Bscroll from 'better-scroll'
 export default {
   data () {
     return {
-      seller: {}
+      seller: {},
+      collection: false
     }
   },
   components: {
@@ -80,6 +81,9 @@ export default {
     iconMap (index) {
       var iconArr = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
       return iconArr[index]
+    },
+    changeCollection () {
+      this.collection = !this.collection
     }
   }
 }
@@ -93,12 +97,12 @@ export default {
     padding: 0 18px;
     background: #fff;
     border-top: 2px solid rgb(229,229,229);
-    border-bottom: 2px solid rgb(229,229,229);
+    @include border-1px(rgb(229,229,229));
     .introduction-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid rgb(243,243,243);
+      @include border-1px(rgb(243,243,243));
       .seller-des {
         padding: 18px 0;
         color: rgb(77,85,93);
@@ -131,10 +135,13 @@ export default {
         text-align: center;
         .heart {
           line-height: 24px;
-          color: rgb(240,20,20);
           padding-bottom: 4px;
+          color: rgb(147,153,159);
           .icon-heart-fill {
             font-size: 24px;
+          }
+          .collection {
+            color: rgb(240,20,20);
           }
         }
         .collection-des {
@@ -174,8 +181,8 @@ export default {
   .seller-notices {
     margin-top: 16px;
     padding: 0 18px;
-    border-top: 2px solid rgb(229,229,229);
-    border-bottom: 2px solid rgb(229,229,229);
+    @include border-top-1px(rgb(229,229,229));
+    @include border-1px(rgb(229,229,229));
     background-color: #fff;
     color: rgb(7,17,27);
     .notices-title {
@@ -196,7 +203,7 @@ export default {
     .notices-content {
       display: flex;
       padding: 16px 12px;
-      border-top: 1px solid rgba(7,17,27,0.1);
+      @include border-top-1px(rgba(7,17,27,0.1));
       .icon {
         width: 16px;
         height: 16px;
@@ -230,8 +237,8 @@ export default {
   .seller-imgs {
     padding: 16px;
     margin-top: 16px;
-    border-top: 2px solid rgb(229,229,229);
-    border-bottom: 2px solid rgb(229,229,229);
+    @include border-top-1px(rgb(229,229,229));
+    @include border-1px(rgb(229,229,229));
     background: #fff;
     .title {
       font-size: 14px;
@@ -253,8 +260,8 @@ export default {
     padding: 16px;
     padding-bottom: 0;
     margin-top: 16px;
-    border-top: 2px solid rgb(229,229,229);
-    border-bottom: 2px solid rgb(229,229,229);
+    @include border-top-1px(rgb(229,229,229));
+    @include border-1px(rgb(229,229,229));
     background: #fff;
     .title {
       font-size: 14px;
@@ -262,7 +269,7 @@ export default {
       padding-bottom: 12px;
     }
     .info {
-      border-top: 1px solid rgba(7,17,27,0.1);
+      @include border-top-1px(rgba(7,17,27,0.1));
       padding: 16px 12px;
       font-size: 12px;
       line-height: 16px;

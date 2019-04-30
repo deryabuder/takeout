@@ -1,6 +1,9 @@
 <template>
   <div class="food">
-    <img class="food-img" :src="good.image"/>
+    <div class="img-header">
+      <img class="food-img" :src="good.image"/>
+      <i class="iconfont icon-left" @click="back"></i>
+    </div>
     <div class="food-info">
       <div class="food-name">
         {{good.name}}
@@ -17,18 +20,18 @@
         <div class="button">加入购物车</div>
       </div>
     </div>
-    <div class="food-introduction" v-if="good.info">
+    <div class="food-introduction border-1px" v-if="good.info">
       <div class="title">商品介绍</div>
       <p class="introduction">{{good.info}}</p>
     </div>
-    <div class="food-ratings">
+    <div class="food-ratings border-1px">
       <div class="filter-wrapper">
         <div class="title">商品评价</div>
         <ratings-filter class="filter" :ratings = "good.ratings" @change="changeRating"
         :ratingsNum="ratingsNum" :ratingsLikeNum="ratingsLikeNum" :ratingsUnlikeNum="ratingsUnlikeNum"></ratings-filter>
       </div>
-      <ul class="ratings-list">
-        <li class="ratings-item" v-for="(item, index) in currentRatings" :key="index">
+      <ul class="ratings-list border-1px">
+        <li class="ratings-item border-1px" v-for="(item, index) in currentRatings" :key="index">
           <div class="rating-info">
             <div class="time">
               <span class="date">{{formatDate(item.rateTime)}}</span>
@@ -94,18 +97,41 @@ export default {
         return value.rateType === 0
       })
       this.ratingsUnlikeNum = ratingsUnlike.length
+    },
+    back () {
+      this.$router.back()
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+@import '../../static/css/mixin';
 .food {
   background-color: rgb(243,245,247);
   color: rgb(7,17,27);
-  .food-img {
+  .img-header {
+    position: relative;
     width: 100%;
-    height: 375px;
+    height: 0;
+    // padding-top取值百分比是相对于包含块的宽度而定
+    padding-top: 100%;
+    .food-img {
+    // 手机宽度自适应，宽高相等
+    top: 0;
+    left: 0;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    }
+    .iconfont {
+      z-index: 2;
+      position: absolute;
+      top: 20px;
+      left: 10px;
+      font-size: 20px;
+      color: #fff;
+    }
   }
   .food-info {
     padding: 18px;
@@ -160,8 +186,8 @@ export default {
   }
   .food-introduction {
     margin-top: 16px;
-    border-top: 2px solid rgb(229,229,229);
-    border-bottom: 2px solid rgb(229,229,229);
+    @include border-top-1px(rgb(229,229,229));
+    @include border-1px(rgb(229,229,229));
     padding: 18px;
     background-color: #fff;
     .title {
@@ -179,8 +205,8 @@ export default {
   }
   .food-ratings {
     margin-top: 16px;
-    border-top: 2px solid rgb(229,229,229);
-    border-bottom: 2px solid rgb(229,229,229);
+    @include border-top-1px(rgb(229,229,229));
+    @include border-1px(rgb(229,229,229));
     background-color: #fff;
     .filter-wrapper {
       background-color: #fff;
@@ -193,11 +219,11 @@ export default {
     }
   }
   .ratings-list {
-    border-top: 1px solid rgb(229,229,229);
+    @include border-top-1px(rgb(229,229,229));
     padding: 0 18px;
     .ratings-item {
       padding: 16px 0;
-      border-bottom: 1px solid rgb(229,229,229);
+      @include border-1px(rgb(229,229,229));
       .rating-info {
         font-size: 10px;
         line-height: 12px;

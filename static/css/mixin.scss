@@ -9,3 +9,40 @@
     background-image: url("/static/img/" + $name + "@3x.png");
   }
 }
+@mixin extend-click {
+  position: relative;
+  &::before {
+    position: absolute;
+    content: '';
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+  }
+}
+
+@mixin border-1px($color) {
+  position: relative;
+  &::after {
+    display: block;
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid $color;
+  }
+}
+
+@mixin border-top-1px($color) {
+  position: relative;
+  &::before {
+    display: block;
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    border-bottom: 1px solid $color;
+  }
+}

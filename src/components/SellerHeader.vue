@@ -9,7 +9,7 @@
           <div class="discount"><span :class="['discount-img', icon]"></span><span class="discount-content">{{des}}</span></div>
         </div>
       </div>
-      <div class="discount-num">5个<i class="iconfont icon-right"></i></div>
+      <router-link to="/notice" tag="div" class="discount-num">5个<i class="iconfont icon-right"></i></router-link>
     </div>
     <router-link to="/notice" class="notice">
       <span class="notice-img"/>
@@ -17,6 +17,9 @@
       <i class="iconfont icon-right"></i>
     </router-link>
     <!-- <router-view/> -->
+    <div class="background">
+      <img :src="seller.avatar"/>
+    </div>
   </div>
 </template>
 
@@ -50,7 +53,8 @@ export default {
 <style lang="scss" scoped>
 @import "../../static/css/mixin.scss";
 .header {
-  background-color: rgba(7,17,27,0.5);
+  position: relative;
+  background-color: rgba(7, 17,27, 0.5);
   .seller-header {
     position: relative;
     padding: 20px 12px 18px 24px;
@@ -170,6 +174,19 @@ export default {
     .icon-right {
       font-size: 8px;
       color: #fff;
+    }
+  }
+  .background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    filter: blur(10px);
+    img {
+      width: 100%;
+      height: 100%;
     }
   }
 }

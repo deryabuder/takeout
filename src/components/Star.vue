@@ -1,10 +1,6 @@
 <template>
-  <div class="score" >
-    <span :class="['star', res[0]]"></span>
-    <span :class="['star', res[1]]"></span>
-    <span :class="['star', res[2]]"></span>
-    <span :class="['star', res[3]]"></span>
-    <span :class="['star', res[4]]"></span>
+  <div class="score" :class="starSize">
+    <span v-for="(itemClass, index) in itemClasses" :class="['star', itemClass]" :key="index"></span>
   </div>
 </template>
 
@@ -14,16 +10,24 @@ export default {
     star: {
       type: Number,
       default: 0
+    },
+    size: {
+      type: Number,
+      default: 36
     }
   },
   data () {
     return {
-      res: []
+      itemClasses: []
     }
   },
   created () {
-    console.log(this.star)
     this.initStar()
+  },
+  computed: {
+    starSize () {
+      return 'star-' + this.size
+    }
   },
   methods: {
     initStar () {
@@ -33,11 +37,11 @@ export default {
       }
       for (var i = 1; i <= 5; i++) {
         if (this.star >= i) {
-          this.res.push('on')
+          this.itemClasses.push('on')
         } else if (this.star < i && this.star >= (i - 0.5)) {
-          this.res.push('half')
+          this.itemClasses.push('half')
         } else {
-          this.res.push('off')
+          this.itemClasses.push('off')
         }
       }
     }
@@ -50,19 +54,58 @@ export default {
 .score {
   .star {
     display: inline-block;
-    padding-left: 2px;
-    height: 18px;
-    width: 18px;
-    background-size: 18px 18px;
     background-repeat: no-repeat;
-    &.on {
-      @include bg-img("star/star36_on")
+  }
+  &.star-24 {
+      // 自定义
+    .star {
+      margin-right: 2px;
+      height: 12px;
+      width: 12px;
+      background-size: 12px 12px;
+      &.on {
+        @include bg-img("star/star24_on")
+      }
+      &.off {
+        @include bg-img("star/star24_off")
+      }
+      &.half {
+        @include bg-img("star/star24_half")
+      }
     }
-    &.off {
-      @include bg-img("star/star36_off")
+  }
+  &.star-36 {
+    .star {
+      margin-right: 6px;
+      height: 18px;
+      width: 18px;
+      background-size: 18px 18px;
+      &.on {
+        @include bg-img("star/star36_on")
+      }
+      &.off {
+        @include bg-img("star/star36_off")
+      }
+      &.half {
+        @include bg-img("star/star36_half")
+      }
     }
-    &.half {
-      @include bg-img("star/star36_half")
+  }
+  &.star-48 {
+    .star {
+      margin-right: 22px;
+      height: 24px;
+      width: 24px;
+      background-size: 24px 24px;
+      &.on {
+        @include bg-img("star/star48_on")
+      }
+      &.off {
+        @include bg-img("star/star48_off")
+      }
+      &.half {
+        @include bg-img("star/star48_half")
+      }
     }
   }
 }

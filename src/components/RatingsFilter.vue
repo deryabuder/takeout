@@ -1,6 +1,6 @@
 <template>
   <div class="ratings-filter">
-    <div class="ratings-buttons">
+    <div class="ratings-buttons border-1px">
       <button class="all button" @click="AllRatings">全部<span class="num">{{ratings.length}}</span></button>
       <button class="like button" @click ="likeRatings">满意<span class="num">{{ratingsLikeNum}}</span></button>
       <button class="unlike button" @click="unlikeRating">不满意<span class="num">{{ratingsUnlikeNum}}</span></button>
@@ -67,10 +67,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../static/css/mixin';
 .ratings-filter {
   .ratings-buttons {
     padding: 18px 0;
-    border-bottom: 1px solid rgba(7,17,27,0.1);
+    @include border-1px(rgba(7,17,27,0.1));
     .button {
       padding: 10px 15px;
       font-size: 12px;
