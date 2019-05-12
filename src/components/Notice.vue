@@ -66,7 +66,8 @@ export default {
 <style lang="scss" scoped>
 @import "../../static/css/mixin.scss";
 .notice {
-  z-index: 2;
+  margin-top: 0;
+  z-index: 10;
   position: fixed;
   top: 0;
   left: 0;

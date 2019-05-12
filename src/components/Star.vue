@@ -31,11 +31,12 @@ export default {
   },
   methods: {
     initStar () {
+      console.log(this.star)
       this.star = Number(this.star)
       if (this.star > 5) {
         this.star = 5
       }
-      for (var i = 1; i <= 5; i++) {
+      for (let i = 1; i <= 5; i++) {
         if (this.star >= i) {
           this.itemClasses.push('on')
         } else if (this.star < i && this.star >= (i - 0.5)) {

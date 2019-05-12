@@ -1,6 +1,6 @@
 <template>
   <div class="seller">
-    <div class="seller-introduction border-1px">
+    <div class="seller-introduction">
       <div class="introduction-top border-1px">
         <div class="seller-des">
           <div class="title">{{seller.name}}</div>
@@ -43,7 +43,9 @@
     <div class="seller-imgs border-1px">
       <div class="title">商家实景</div>
       <div class="imgs wrapper" ref="wrapper">
-        <img class="img" v-for="(item, index) in seller.pics" :src="item" :key="index"/>
+        <div class="content" ref="content">
+          <img class="img" v-for="(item, index) in seller.pics" :src="item" :key="index"/>
+        </div>
       </div>
     </div>
     <div class="seller-info border-1px">
@@ -62,7 +64,8 @@ export default {
   data () {
     return {
       seller: {},
-      collection: false
+      collection: false,
+      scroll: null
     }
   },
   components: {
@@ -72,9 +75,8 @@ export default {
     getSellerData().then(res => {
       res = res.data
       this.seller = res.result
-      this.$nextTick(() => {
-        this.scroll = new Bscroll(this.$refs.wrapper, {})
-      })
+      console.log(this.seller.score)
+      this._initPicScroll()
     })
   },
   methods: {
@@ -84,6 +86,24 @@ export default {
     },
     changeCollection () {
       this.collection = !this.collection
+    },
+    _initPicScroll () {
+      if (this.seller.pics) {
+        let picWidth = 120
+        let margin = 6
+        let width = (picWidth + margin) * this.seller.pics.length - margin
+        this.$refs.content.style.width = width + 'px'
+        if (!this.scroll) {
+          this.scroll = new Bscroll(this.$refs.wrapper, {
+            scrollX: true,
+            scrollY: false,
+            // 纵向的滚动还是保留原生滚动
+            eventPassthrough: 'vertical'
+          })
+        } else {
+          this.scroll.refresh()
+        }
+      }
     }
   }
 }
@@ -96,8 +116,6 @@ export default {
   .seller-introduction {
     padding: 0 18px;
     background: #fff;
-    border-top: 2px solid rgb(229,229,229);
-    @include border-1px(rgb(229,229,229));
     .introduction-top {
       display: flex;
       align-items: center;
@@ -115,10 +133,6 @@ export default {
           display: flex;
           align-items: center;
           padding-top: 8px;
-          .star {
-            height: 18px;
-            overflow: hidden;
-          }
           .ratings-num {
             font-size: 10px;
             line-height: 18px;
@@ -132,6 +146,7 @@ export default {
         }
       }
       .collection {
+        width: 50px;
         text-align: center;
         .heart {
           line-height: 24px;
@@ -247,12 +262,16 @@ export default {
     }
     .imgs {
       width: 100%;
-      display: flex;
-      .img {
-        // flex: 1;
-        width: 120px;
-        height: 90px;
-        padding-right: 6px;
+      overflow: hidden;
+      white-space: nowrap;
+      .content {
+        font-size: 0;
+        .img {
+          // flex: 1;
+          width: 120px;
+          height: 90px;
+          margin-right: 6px;
+        }
       }
     }
   }

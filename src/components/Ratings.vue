@@ -85,11 +85,11 @@ export default {
     ratingsInfo (ratings) {
       this.ratingsNum = ratings.length
       var ratingsLike = ratings.filter((value, index) => {
-        return value.rateType === 1
+        return value.rateType === 0
       })
       this.ratingsLikeNum = ratingsLike.length
       var ratingsUnlike = ratings.filter((value, index) => {
-        return value.rateType === 0
+        return value.rateType === 1
       })
       this.ratingsUnlikeNum = ratingsUnlike.length
     }
@@ -104,7 +104,8 @@ export default {
   .score-wrapper {
     display: flex;
     background-color: #fff;
-    padding: 18px 0;
+    padding: 12px 0;
+    margin-bottom: 16px;
     @include border-1px(rgba(7,17,27,0.1));
     .score-total {
       float: left;
@@ -126,7 +127,7 @@ export default {
       .score-info {
         font-size: 10px;
         line-height: 10px;
-        color: rgb(7,17,27);
+        color: rgb(147, 153, 159);
         padding-bottom: 6px;
       }
     }
@@ -143,8 +144,7 @@ export default {
           color: rgb(7,17,27);
         }
         .star {
-          padding: 0 12px;
-          height: 18px;
+          padding: 0 6px 0 12px;
         }
         .score-num {
           font-size: 12px;

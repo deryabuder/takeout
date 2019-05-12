@@ -6,7 +6,9 @@ import router from './router'
 import '../static/css/reset.css'
 import '../static/css/iconfont.css'
 import '../static/css/index.scss'
+import fastClick from 'fastclick'
 
+fastClick.attach(document.body)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

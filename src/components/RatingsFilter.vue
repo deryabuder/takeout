@@ -1,9 +1,9 @@
 <template>
   <div class="ratings-filter">
     <div class="ratings-buttons border-1px">
-      <button class="all button" @click="AllRatings">全部<span class="num">{{ratings.length}}</span></button>
-      <button class="like button" @click ="likeRatings">满意<span class="num">{{ratingsLikeNum}}</span></button>
-      <button class="unlike button" @click="unlikeRating">不满意<span class="num">{{ratingsUnlikeNum}}</span></button>
+      <button class="all button" :class="{'active': selectType === 0}" @click="AllRatings">全部<span class="num">{{ratings.length}}</span></button>
+      <button class="like button" :class="{'active': selectType === 1}" @click ="likeRatings">满意<span class="num">{{ratingsLikeNum}}</span></button>
+      <button class="unlike button" :class="{'active': selectType === 2}" @click="unlikeRating">不满意<span class="num">{{ratingsUnlikeNum}}</span></button>
     </div>
     <div class="ratings-check" @click="filterRatings">
       <i :class="['iconfont','icon-check-circle-fill', isFilter ? 'filter':'']"></i>
@@ -30,37 +30,50 @@ export default {
     ratingsUnlikeNum: {
       type: Number,
       default: 0
+    },
+    textArr: {
+      type: Array,
+      default: () => ['全部', '满意', '不满意']
     }
   },
   data () {
     return {
-      currentRatings: [],
-      isFilter: false
+      currentRatings: null,
+      isFilter: false,
+      filterRatingArr: [],
+      selectType: 0
     }
   },
   methods: {
-    filterRatings () {
-      this.currentRatings = this.isFilter ? this.ratings : this.ratings.filter((value, index) => {
+    _filterRatings () {
+      if (this.currentRatings === null) this.currentRatings = this.ratings
+      this.filterRatingArr = this.isFilter ? this.currentRatings.filter((value, index) => {
         return value.text !== ''
-      })
-      this.$emit('change', this.currentRatings)
+      }) : this.currentRatings
+      this.$emit('change', this.filterRatingArr)
+    },
+    filterRatings () {
       this.isFilter = !this.isFilter
+      this._filterRatings()
     },
     AllRatings () {
       this.currentRatings = this.ratings
-      this.$emit('change', this.currentRatings)
+      this.selectType = 0
+      this._filterRatings()
     },
     likeRatings () {
       this.currentRatings = this.ratings.filter((value, index) => {
-        return value.rateType === 1
+        return value.rateType === 0
       })
-      this.$emit('change', this.currentRatings)
+      this.selectType = 1
+      this._filterRatings()
     },
     unlikeRating () {
       this.currentRatings = this.ratings.filter((value, index) => {
-        return value.rateType === 0
+        return value.rateType === 1
       })
-      this.$emit('change', this.currentRatings)
+      this.selectType = 2
+      this._filterRatings()
     }
   }
 }
@@ -76,22 +89,34 @@ export default {
       padding: 10px 15px;
       font-size: 12px;
       margin-right: 5px;
+      border-radius: 5px;
       .num {
         font-size: 8px;
         padding-left: 5px;
       }
     }
     .all {
-      background-color: rgb(0, 160, 220);
-      color: #fff;
-      font-weight: bold;
+      background: rgb(204,236,248);
+      color: rgb(88,99,107);
+      &.active {
+        background: rgb(0, 160, 220);
+        color: #fff;
+      }
     }
     .like {
       background: rgb(204,236,248);
       color: rgb(88,99,107);
+      &.active {
+        background: rgb(0, 160, 220);
+        color: #fff;
+      }
     }
     .unlike {
       color: rgb(88,99,107);
+      &.active {
+        background: rgb(102, 102, 102);
+        color: #fff;
+      }
     }
   }
   .filter {

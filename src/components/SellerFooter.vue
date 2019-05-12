@@ -38,6 +38,7 @@ export default {
 
 <style lang="scss" scoped>
 .footer {
+  z-index: 2;
   position: fixed;
   display: flex;
   justify-content: space-between;
@@ -45,7 +46,7 @@ export default {
   left: 0;
   right: 0;
   height: 48px;
-  background-color: #141d27;
+  background-color: rgb(19, 29, 38);
   .left {
     display: flex;
     .cart-wrapper {
@@ -54,21 +55,24 @@ export default {
       height: 56px;
       width: 56px;
       margin: 0 18px;
-      background-color: #f00;
+      background-color: rgb(19, 29, 38);
       border-radius: 50%;
       z-index: 2;
       .cart {
         position: absolute;
         height: 44px;
         width: 44px;
-        background-color: rgba(0, 0, 0, 0.2);
+        background-color: rgb(43, 51, 59);
         border-radius: 50%;
         left: 6px;
         top: 6px;
         .icon-cart {
+          display: inline-block;
           font-size: 24px;
-          line-height: 24px;
-          color: rgba(255,255,255,0.4);
+          margin-top: 50%;
+          margin-left: 50%;
+          transform: translate(-50%, -50%);
+          color: rgb(128, 138, 133);
 
         }
       }
@@ -97,7 +101,7 @@ export default {
   }
   .pay-button {
     width: 105px;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgb(43, 51, 59);
     .pay {
       text-align: center;
       font-size: 12px;

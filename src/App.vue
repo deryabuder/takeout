@@ -24,4 +24,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.router-view {
+  margin-top: 170px;
+}
 </style>
