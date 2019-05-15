@@ -30,6 +30,7 @@
         </div>
       </div>
     </div>
+    <split></split>
     <div class="seller-notices border-1px">
       <div class="notices-title">
         <div class="title">公告与活动</div>
@@ -40,6 +41,7 @@
         <span class="des">{{item.description}}</span>
       </div>
     </div>
+    <split></split>
     <div class="seller-imgs border-1px">
       <div class="title">商家实景</div>
       <div class="imgs wrapper" ref="wrapper">
@@ -48,6 +50,7 @@
         </div>
       </div>
     </div>
+    <split></split>
     <div class="seller-info border-1px">
       <div class="title">商家信息</div>
       <div class="info border-1px" v-for="(item, index) in seller.infos" :key="index">{{item}}</div>
@@ -57,6 +60,7 @@
 
 <script>
 import Star from './Star'
+import Split from './Split'
 import { getSellerData } from '../api/api'
 import Bscroll from 'better-scroll'
 
@@ -69,7 +73,8 @@ export default {
     }
   },
   components: {
-    Star
+    Star,
+    Split
   },
   created () {
     getSellerData().then(res => {
@@ -77,6 +82,9 @@ export default {
       this.seller = res.result
       this._initPicScroll()
     })
+    if (localStorage.getItem('collection') !== null) {
+      this.collection = localStorage.getItem('collection')
+    }
   },
   methods: {
     iconMap (index) {
@@ -84,6 +92,7 @@ export default {
       return iconArr[index]
     },
     changeCollection () {
+      localStorage.setItem('collection', !this.collection)
       this.collection = !this.collection
     },
     _initPicScroll () {
@@ -111,10 +120,9 @@ export default {
 <style lang="scss" scoped>
 @import "../../static/css/mixin";
 .seller {
-  background-color: rgb(243,243,243);
+  background-color: #fff;
   .seller-introduction {
     padding: 0 18px;
-    background: #fff;
     .introduction-top {
       display: flex;
       align-items: center;
@@ -193,11 +201,7 @@ export default {
     }
   }
   .seller-notices {
-    margin-top: 16px;
     padding: 0 18px;
-    @include border-top-1px(rgb(229,229,229));
-    @include border-1px(rgb(229,229,229));
-    background-color: #fff;
     color: rgb(7,17,27);
     .notices-title {
       padding: 18px 0 16px;
@@ -250,10 +254,6 @@ export default {
   }
   .seller-imgs {
     padding: 16px;
-    margin-top: 16px;
-    @include border-top-1px(rgb(229,229,229));
-    @include border-1px(rgb(229,229,229));
-    background: #fff;
     .title {
       font-size: 14px;
       line-height: 14px;
@@ -277,10 +277,6 @@ export default {
   .seller-info {
     padding: 16px;
     padding-bottom: 0;
-    margin-top: 16px;
-    @include border-top-1px(rgb(229,229,229));
-    @include border-1px(rgb(229,229,229));
-    background: #fff;
     .title {
       font-size: 14px;
       line-height: 14px;

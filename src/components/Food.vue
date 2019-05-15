@@ -1,7 +1,7 @@
 <template>
   <!-- 只是起一个包裹作用，不会显示在html结构中，不要在上面加类 -->
   <transition name="fade">
-    <div class="food-wrapper" ref="wrapper" v-if="showFlag">
+    <div class="food-wrapper" ref="foodDetail" v-show="showFlag">
       <div class="food">
         <div class="img-header">
           <img class="food-img" :src="food.image"/>
@@ -23,10 +23,12 @@
             <div class="button">加入购物车</div>
           </div>
         </div>
+        <split></split>
         <div class="food-introduction border-1px" v-if="food.info">
           <div class="title">商品介绍</div>
           <p class="introduction">{{food.info}}</p>
         </div>
+        <split></split>
         <div class="food-ratings border-1px">
           <div class="filter-wrapper">
             <div class="title">商品评价</div>
@@ -46,7 +48,7 @@
                 </div>
               </div>
               <div class="rating-content">
-                <i :class="['iconfont', item.rateType ? 'icon-like-fill':'icon-unlike-fill']"></i>
+                <i :class="['iconfont', item.rateType ? 'icon-unlike-fill' : 'icon-like-fill']"></i>
                 <span class="content" v-if="item.text">{{item.text}}</span>
               </div>
             </li>
@@ -59,8 +61,9 @@
 
 <script>
 import RatingsFilter from './RatingsFilter'
+import Split from './Split'
 import { formatDate } from '../../static/js/util'
-// import BScroll from 'better-scroll'
+import Bscroll from 'better-scroll'
 export default {
   props: {
     food: {
@@ -86,7 +89,11 @@ export default {
     }
   },
   components: {
-    RatingsFilter
+    RatingsFilter,
+    Split
+  },
+  created () {
+    this._initScroll()
   },
   methods: {
     changeRating (currentRatings) {
@@ -112,19 +119,19 @@ export default {
     },
     show () {
       this.showFlag = true
+    },
+    _initScroll () {
+      this.$nextTick(() => {
+        if (!this.foodDetail) {
+          this.foodDetail = new Bscroll(this.$refs.foodDetail, {
+            click: true,
+            mouseWheel: true
+          })
+        } else {
+          this.foodDetail.refresh()
+        }
+      })
     }
-    // _initScroll () {
-    //   this.$nextTick(() => {
-    //     if (!this.scroll) {
-    //       this.scroll = new BScroll(this.$refs.wrapper, {
-    //         click: true,
-    //         mouseWheel: true
-    //       })
-    //     } else {
-    //       this.scroll.refresh()
-    //     }
-    //   })
-    // }
   }
 }
 </script>
@@ -143,7 +150,7 @@ export default {
     top: 0;
     right: 0;
     bottom: 48px;
-    background-color: rgb(243,245,247);
+    background-color: #fff;
     color: rgb(7,17,27);
     z-index: 2;
     overflow:hidden;
@@ -172,7 +179,6 @@ export default {
       }
       .food-info {
         padding: 18px;
-        background-color: #fff;
         .food-title {
           font-size: 14px;
           line-height: 14px;
@@ -222,11 +228,7 @@ export default {
         }
       }
       .food-introduction {
-        margin-top: 16px;
-        @include border-top-1px(rgb(229,229,229));
-        @include border-1px(rgb(229,229,229));
         padding: 18px;
-        background-color: #fff;
         .title {
           font-size: 14px;
           line-height: 14px;
@@ -241,12 +243,7 @@ export default {
         }
       }
       .food-ratings {
-        margin-top: 16px;
-        @include border-top-1px(rgb(229,229,229));
-        @include border-1px(rgb(229,229,229));
-        background-color: #fff;
         .filter-wrapper {
-          background-color: #fff;
           padding: 0 18px;
           .title {
             font-size: 14px;

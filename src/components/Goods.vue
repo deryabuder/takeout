@@ -13,7 +13,7 @@
       <div class="goods-right">
         <dl class="goods-right-content" v-for="(item, index) in goods" :key="index">
           <dt class="foods-type">{{item.name}}</dt>
-          <dd v-for="(food, num) in item.foods" :key="num" class="foods-item border-1px" @click="showFood(food)">
+          <dd v-for="(food, num) in item.foods" :key="num" class="foods-item border-1px" @click="showFood(food)" :food="changeFood(food, index, num)">
             <img :src="food.icon" class="food-avatar"/>
             <div class="food-info">
               <div class="name">{{food.name}}</div>
@@ -27,7 +27,7 @@
                   <span class="current-price">￥<span class="num">{{food.price}}</span></span>
                   <span class="old-price" v-if="food.oldPrice">￥<span class="num">{{food.oldPrice}}</span></span>
                 </div>
-                <cart-control :food="food"></cart-control>
+                <cart-control :food="food" :increment="increment"></cart-control>
               </div>
             </div>
           </dd>
@@ -35,7 +35,7 @@
       </div>
     </div>
     <food :food="selectedFood" ref="food"></food>
-    <seller-footer></seller-footer>
+    <seller-footer :selectFoods="selectFoods" ref="footer"></seller-footer>
   </div>
 </template>
 
@@ -83,6 +83,7 @@ export default {
     }
   },
   created () {
+    console.log(2222)
     getGoodsData().then(res => {
       res = res.data
       this.goods = res.result
@@ -124,14 +125,6 @@ export default {
         this.goodsScroll.on('scroll', (pos) => {
           this.scrollY = Math.abs(Math.round(pos.y))
         })
-        // if (!this.scroll3) {
-        //   this.scroll3 = new Bscroll(this.$refs.food, {
-        //     click: true,
-        //     mouseWheel: true
-        //   })
-        // } else {
-        //   this.scroll3.refresh()
-        // }
       })
     },
     _calcHeight () {
@@ -148,6 +141,13 @@ export default {
       let foodList = this.$refs.wrapper2.getElementsByClassName('goods-right-content')
       this.goodsScroll.scrollToElement(foodList[index], 300)
       this.scrollY = this.listHeight[index]
+    },
+    changeFood (food, index, num) {
+      // console.log(food, index, num)
+      this.goods[index][num] = food
+    },
+    increment (target) {
+      this.$refs.footer.drop(target)
     }
   }
 }

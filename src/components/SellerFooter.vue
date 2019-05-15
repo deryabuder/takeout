@@ -33,116 +33,6 @@
                 </div>
               </div>
             </li>
-            <li class="item border-1px">
-              <div class="food-name">莲子核桃黑米粥</div>
-              <div class="check-info">
-                <span class="price">￥<span class="price-num">10</span></span>
-                <div class="count">
-                  <i class="iconfont icon-minus-circle"></i>
-                  <span class="num">0</span>
-                  <i class="iconfont icon-plus-circle-fill"></i>
-                </div>
-              </div>
-            </li>
-            <li class="item border-1px">
-              <div class="food-name">莲子核桃黑米粥</div>
-              <div class="check-info">
-                <span class="price">￥<span class="price-num">10</span></span>
-                <div class="count">
-                  <i class="iconfont icon-minus-circle"></i>
-                  <span class="num">0</span>
-                  <i class="iconfont icon-plus-circle-fill"></i>
-                </div>
-              </div>
-            </li>
-            <li class="item border-1px">
-              <div class="food-name">莲子核桃黑米粥</div>
-              <div class="check-info">
-                <span class="price">￥<span class="price-num">10</span></span>
-                <div class="count">
-                  <i class="iconfont icon-minus-circle"></i>
-                  <span class="num">0</span>
-                  <i class="iconfont icon-plus-circle-fill"></i>
-                </div>
-              </div>
-            </li>
-            <li class="item border-1px">
-              <div class="food-name">莲子核桃黑米粥</div>
-              <div class="check-info">
-                <span class="price">￥<span class="price-num">10</span></span>
-                <div class="count">
-                  <i class="iconfont icon-minus-circle"></i>
-                  <span class="num">0</span>
-                  <i class="iconfont icon-plus-circle-fill"></i>
-                </div>
-              </div>
-            </li>
-            <li class="item border-1px">
-              <div class="food-name">莲子核桃黑米粥</div>
-              <div class="check-info">
-                <span class="price">￥<span class="price-num">10</span></span>
-                <div class="count">
-                  <i class="iconfont icon-minus-circle"></i>
-                  <span class="num">0</span>
-                  <i class="iconfont icon-plus-circle-fill"></i>
-                </div>
-              </div>
-            </li>
-            <li class="item border-1px">
-              <div class="food-name">莲子核桃黑米粥</div>
-              <div class="check-info">
-                <span class="price">￥<span class="price-num">10</span></span>
-                <div class="count">
-                  <i class="iconfont icon-minus-circle"></i>
-                  <span class="num">0</span>
-                  <i class="iconfont icon-plus-circle-fill"></i>
-                </div>
-              </div>
-            </li>
-            <li class="item border-1px">
-              <div class="food-name">莲子核桃黑米粥</div>
-              <div class="check-info">
-                <span class="price">￥<span class="price-num">10</span></span>
-                <div class="count">
-                  <i class="iconfont icon-minus-circle"></i>
-                  <span class="num">0</span>
-                  <i class="iconfont icon-plus-circle-fill"></i>
-                </div>
-              </div>
-            </li>
-            <li class="item border-1px">
-              <div class="food-name">莲子核桃黑米粥</div>
-              <div class="check-info">
-                <span class="price">￥<span class="price-num">10</span></span>
-                <div class="count">
-                  <i class="iconfont icon-minus-circle"></i>
-                  <span class="num">0</span>
-                  <i class="iconfont icon-plus-circle-fill"></i>
-                </div>
-              </div>
-            </li>
-            <li class="item border-1px">
-              <div class="food-name">莲子核桃黑米粥</div>
-              <div class="check-info">
-                <span class="price">￥<span class="price-num">10</span></span>
-                <div class="count">
-                  <i class="iconfont icon-minus-circle"></i>
-                  <span class="num">0</span>
-                  <i class="iconfont icon-plus-circle-fill"></i>
-                </div>
-              </div>
-            </li>
-            <li class="item border-1px">
-              <div class="food-name">莲子核桃黑米粥</div>
-              <div class="check-info">
-                <span class="price">￥<span class="price-num">10</span></span>
-                <div class="count">
-                  <i class="iconfont icon-minus-circle"></i>
-                  <span class="num">0</span>
-                  <i class="iconfont icon-plus-circle-fill"></i>
-                </div>
-              </div>
-            </li>
           </ul>
         </div>
       </div>
@@ -161,6 +51,12 @@
 import BScroll from 'better-scroll'
 import CartControl from './CartControl'
 export default {
+  props: {
+    selectFoods: {
+      type: Array,
+      default: () => []
+    }
+  },
   data () {
     return {
       show: false,

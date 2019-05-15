@@ -21,6 +21,7 @@ export default {
       } else {
         this.food.count++
       }
+      this.$emit('increment', event.target)
     },
     decrease () {
       if (this.food.count >= 1) {

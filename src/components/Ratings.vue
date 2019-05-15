@@ -23,6 +23,7 @@
         </div>
       </div>
     </div>
+    <split></split>
     <div class="rating-wrapper">
       <ratings-filter :ratings="ratings" @change="changeRating"
       :ratingsNum="ratingsNum" :ratingsLikeNum="ratingsLikeNum" :ratingsUnlikeNum="ratingsUnlikeNum"/>
@@ -38,7 +39,7 @@
           </div>
           <div class="ratings-content">{{item.text}}</div>
           <div class="foods clearfix" v-if="item.recommend.length">
-            <i :class="['iconfont', item.rateType ? 'icon-like-fill': 'icon-unlike-fill']"></i>
+            <i :class="['iconfont', item.rateType ? 'icon-unlike-fill':'icon-like-fill']"></i>
             <span v-for="(recommend, index) in item.recommend" :key="index" class="food-name">{{recommend}}</span>
           </div>
         </div>
@@ -50,6 +51,7 @@
 <script>
 import Star from './Star'
 import RatingsFilter from './RatingsFilter'
+import Split from './Split'
 import { getRatingsData, getSellerData } from '../api/api'
 export default {
   data () {
@@ -64,7 +66,8 @@ export default {
   },
   components: {
     Star,
-    RatingsFilter
+    RatingsFilter,
+    Split
   },
   created () {
     getRatingsData().then(res => {
@@ -100,13 +103,10 @@ export default {
 <style lang="scss" scoped>
 @import "../../static/css/mixin.scss";
 .ratings {
-  background-color: rgb(243,245,247);
+  background-color: #fff;
   .score-wrapper {
     display: flex;
-    background-color: #fff;
     padding: 12px 0;
-    margin-bottom: 16px;
-    @include border-1px(rgba(7,17,27,0.1));
     .score-total {
       float: left;
       padding: 0 10px;
@@ -161,11 +161,9 @@ export default {
     }
   }
   .rating-wrapper {
-    background-color: #fff;
     padding: 0 18px;
   }
   .ratings-list {
-    background-color: #fff;
     padding: 0 18px;
     color: rgb(7,17,27);
     border: 1px solid rgba(7,17,27,0.1);
