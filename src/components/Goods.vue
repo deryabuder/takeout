@@ -2,7 +2,7 @@
   <div class="goods">
     <div class="goods-left-wrapper" ref="wrapper1">
       <ul class="goods-left">
-        <li class="left-item border-1px" v-for="(item, index) in goods" :key="index">
+        <li class="left-item border-1px" :class="{'current': index === currentIndex}" v-for="(item, index) in goods" :key="index" @click="selectMenu(index)">
           <span class="item-des">
             <span v-if="item.type > 0" :class="['icon',iconMap(item.type)]"></span>{{item.name}}
           </span>
@@ -50,10 +50,9 @@ export default {
   data () {
     return {
       goods: [],
-      checkObj: {},
       selectedFood: {},
-      scroll1: null,
-      scroll2: null
+      listHeight: [],
+      scrollY: 0
     }
   },
   components: {
@@ -61,11 +60,36 @@ export default {
     Food,
     SellerFooter
   },
+  computed: {
+    currentIndex () {
+      for (let i = 0; i < this.listHeight.length; i++) {
+        let height1 = this.listHeight[i]
+        let height2 = this.listHeight[i + 1]
+        if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
+          return i
+        }
+      }
+      return 0
+    },
+    selectFoods () {
+      let foods = []
+      for (let i = 0; i < this.goods.length; i++) {
+        let good = this.goods[i]
+        if (good.count > 0) {
+          foods.push(good)
+        }
+      }
+      return foods
+    }
+  },
   created () {
     getGoodsData().then(res => {
       res = res.data
       this.goods = res.result
-      this._initScroll()
+      this.$nextTick(() => {
+        this._initScroll()
+        this._calcHeight()
+      })
     })
   },
   methods: {
@@ -79,24 +103,51 @@ export default {
     },
     _initScroll () {
       this.$nextTick(() => {
-        if (!this.scroll1) {
-          this.scroll1 = new Bscroll(this.$refs.wrapper1, {
+        if (!this.menuScroll) {
+          this.menuScroll = new Bscroll(this.$refs.wrapper1, {
             // 默认响应的鼠标拖动
             click: true,
             mouseWheel: true
           })
         } else {
-          this.scroll1.refresh()
+          this.menuScroll.refresh()
         }
-        if (!this.scroll2) {
-          this.scroll2 = new Bscroll(this.$refs.wrapper2, {
+        if (!this.goodsScroll) {
+          this.goodsScroll = new Bscroll(this.$refs.wrapper2, {
             click: true,
             mouseWheel: true
           })
         } else {
-          this.scroll2.refresh()
+          this.goodsScroll.refresh()
         }
+        // 事件响应这样写
+        this.goodsScroll.on('scroll', (pos) => {
+          this.scrollY = Math.abs(Math.round(pos.y))
+        })
+        // if (!this.scroll3) {
+        //   this.scroll3 = new Bscroll(this.$refs.food, {
+        //     click: true,
+        //     mouseWheel: true
+        //   })
+        // } else {
+        //   this.scroll3.refresh()
+        // }
       })
+    },
+    _calcHeight () {
+      let foodList = this.$refs.wrapper2.getElementsByClassName('goods-right-content')
+      let height = 0
+      this.listHeight.push(height)
+      for (let i = 0; i < foodList.length; i++) {
+        let item = foodList[i]
+        height += item.clientHeight
+        this.listHeight.push(height)
+      }
+    },
+    selectMenu (index) {
+      let foodList = this.$refs.wrapper2.getElementsByClassName('goods-right-content')
+      this.goodsScroll.scrollToElement(foodList[index], 300)
+      this.scrollY = this.listHeight[index]
     }
   }
 }
@@ -108,22 +159,30 @@ export default {
   display: flex;
   .goods-left-wrapper {
     max-height: calc(100vh - 218px);
+    overflow: hidden;
     .goods-left {
       width: 80px;
       color: rgb(7, 17, 27);
       background-color: #f3f5f7;
-      padding: 0 12px;
+      // padding: 0 12px;
       box-sizing: border-box;
       .left-item {
         display: table;
         height: 54px;
+        width: 100%;
+        padding: 0 12px;
         font-size: 12px;
         line-height: 14px;
         font-weight: 200;
         box-sizing: border-box;
-        @include border-1px(rgba(7, 17, 27, 0.1));
         vertical-align: middle;
+        &.current {
+          background-color: #fff;
+          color: #000;
+        }
         .item-des {
+          // @include border-1px(rgba(7, 17, 27, 0.1));
+          width: 100%;
           display: table-cell;
           vertical-align: middle;
           .icon {
@@ -159,6 +218,7 @@ export default {
     min-width:0;
     color: rgb(147, 153, 159);
     max-height: calc(100vh - 218px);
+    overflow: hidden;
     .goods-right {
       .goods-right-content {
         .foods-type {

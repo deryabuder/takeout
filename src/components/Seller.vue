@@ -75,7 +75,6 @@ export default {
     getSellerData().then(res => {
       res = res.data
       this.seller = res.result
-      console.log(this.seller.score)
       this._initPicScroll()
     })
   },

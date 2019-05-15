@@ -3,8 +3,6 @@ import Router from 'vue-router'
 import Goods from '@/components/Goods.vue'
 import Ratings from '@/components/Ratings.vue'
 import Seller from '@/components/Seller.vue'
-import CheckList from '@/components/CheckList'
-import Notice from '@/components/Notice'
 Vue.use(Router)
 
 export default new Router({
@@ -17,13 +15,7 @@ export default new Router({
     },
     {
       path: '/goods',
-      component: Goods,
-      children: [
-        {
-          path: 'checklist',
-          component: CheckList
-        }
-      ]
+      component: Goods
     },
     {
       path: '/ratings',
@@ -32,10 +24,6 @@ export default new Router({
     {
       path: '/seller',
       component: Seller
-    },
-    {
-      path: '/notice',
-      component: Notice
     }
   ]
 })

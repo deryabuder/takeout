@@ -131,6 +131,13 @@
         </ul>
       </div>
     </div>
+    <div class="pay" v-if="payFlag">
+      <div class="pay-content clearfix">
+        <div class="title">支付</div>
+        <div class="des">您需要支付20元</div>
+        <div class="confirm border-1px" @click="confirm">确定</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -139,7 +146,8 @@ import BScroll from 'better-scroll'
 export default {
   data () {
     return {
-      scroll: null
+      scroll: null,
+      payFlag: false
     }
   },
   mounted () {
@@ -149,6 +157,11 @@ export default {
       })
     } else {
       this.scroll.refresh()
+    }
+  },
+  methods: {
+    confirm () {
+      this.payFlag = false
     }
   }
 }
@@ -172,7 +185,6 @@ export default {
     overflow: hidden;
     background: #fff;
     .header {
-      z-index: 1;
       display: flex;
       justify-content: space-between;
       height: 40px;
@@ -240,6 +252,36 @@ export default {
       }
     }
   }
+  .pay {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(7, 17, 27, 0.4);
+    .pay-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      width: 250px;
+      font-size: 14px;
+      border-radius: 3px;
+      background-color: #fff;
+      .title {
+        color: #000;
+        padding-top: 20px;
+      }
+      .des {
+        font-size: 12px;
+        color: rgb(218, 218, 218);
+        padding: 10px 0;
+      }
+      .confirm {
+        @include border-top-1px(#ccc);
+        color: rgb(252, 145, 83);
+        line-height: 40px;
+      }
+    }
+  }
 }
-
 </style>

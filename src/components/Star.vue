@@ -16,13 +16,18 @@ export default {
       default: 36
     }
   },
+  created () {
+    this._initStar()
+  },
+  watch: {
+    star () {
+      this._initStar()
+    }
+  },
   data () {
     return {
       itemClasses: []
     }
-  },
-  created () {
-    this.initStar()
   },
   computed: {
     starSize () {
@@ -30,12 +35,11 @@ export default {
     }
   },
   methods: {
-    initStar () {
-      console.log(this.star)
-      this.star = Number(this.star)
+    _initStar () {
       if (this.star > 5) {
         this.star = 5
       }
+      this.itemClasses = []
       for (let i = 1; i <= 5; i++) {
         if (this.star >= i) {
           this.itemClasses.push('on')

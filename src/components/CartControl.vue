@@ -17,14 +17,13 @@ export default {
   methods: {
     add () {
       if (!this.food.count) {
-        this.food.count = 1
+        this.$set(this.food, 'count', 1)
       } else {
         this.food.count++
       }
-      console.log(this.food.count)
     },
     decrease () {
-      if (this.food >= 1) {
+      if (this.food.count >= 1) {
         this.food.count--
       }
     }
