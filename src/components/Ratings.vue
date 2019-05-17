@@ -52,22 +52,27 @@
 import Star from './Star'
 import RatingsFilter from './RatingsFilter'
 import Split from './Split'
-import { getRatingsData, getSellerData } from '../api/api'
+import { getRatingsData } from '../api/api'
 export default {
+  components: {
+    Star,
+    RatingsFilter,
+    Split
+  },
+  props: {
+    seller: {
+      type: Object,
+      default: () => {}
+    }
+  },
   data () {
     return {
       ratings: [],
-      seller: {},
       currentRatings: [],
       ratingsNum: 0,
       ratingsLikeNum: 0,
       ratingsUnlikeNum: 0
     }
-  },
-  components: {
-    Star,
-    RatingsFilter,
-    Split
   },
   created () {
     getRatingsData().then(res => {
@@ -75,10 +80,6 @@ export default {
       this.ratings = res.result
       this.currentRatings = this.ratings
       this.ratingsInfo(this.ratings)
-    })
-    getSellerData().then(res => {
-      res = res.data
-      this.seller = res.result
     })
   },
   methods: {

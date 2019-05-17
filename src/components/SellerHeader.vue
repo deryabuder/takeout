@@ -7,7 +7,7 @@
           <div class="title clearfix"><span class="seller-img"/><span class="seller-name">{{seller.name}}</span></div>
           <div class="delivery">{{seller.description}} / {{seller.deliveryTime}}分钟送达</div>
           <div class="discount-wrapper">
-            <div class="discount"><span :class="['discount-img', icon]"></span><span class="discount-content">{{des}}</span></div>
+            <div class="discount"><span :class="['discount-img', iconMap(seller.supports[0].type)]"></span><span class="discount-content">{{seller.supports[0].description}}</span></div>
           </div>
         </div>
         <div class="discount-num" @click="show">5个<i class="iconfont icon-right"></i></div>
@@ -58,27 +58,24 @@
 </template>
 
 <script>
-import { getSellerData } from '../api/api'
 import Star from './Star.vue'
 export default {
   components: {
     Star
   },
-  data () {
-    return {
-      seller: {},
-      icon: '',
-      des: '',
-      showFlag: false
+  props: {
+    seller: {
+      type: Object,
+      default: () => {}
     }
   },
-  created () {
-    getSellerData().then(res => {
-      res = res.data
-      this.seller = res.result
-      this.icon = this.iconMap(this.seller.supports[0].type)
-      this.des = this.seller.supports[0].description
-    })
+  data () {
+    return {
+      icon: '',
+      des: '',
+      showFlag: false,
+      firstIcon: ''
+    }
   },
   methods: {
     iconMap (index) {
@@ -255,8 +252,11 @@ export default {
     .notice-content-wrapper {
       width: 100%;
       min-height: 100%;
+      display: flex;
+      justify-content: center;
       .notice-content {
-        padding:64px 32px;
+        padding:64px 0;
+        width: 80%;
         color: #fff;
         .notice-header {
           text-align: center;

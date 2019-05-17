@@ -11,8 +11,8 @@
           </div>
         </div>
         <div class="collection">
-          <div class="heart"><i :class="['iconfont', 'icon-heart-fill', collection ? 'collection' : '']" @click="changeCollection"></i></div>
-          <div class="collection-des">{{collection ? "已收藏" : "收藏"}}</div>
+          <div class="heart"><i class="iconfont icon-heart-fill" :class="favoriteClass" @click="changeCollection"></i></div>
+          <div class="collection-des">{{favoriteText}}</div>
         </div>
       </div>
       <div class="introduction-bottom">
@@ -61,29 +61,42 @@
 <script>
 import Star from './Star'
 import Split from './Split'
-import { getSellerData } from '../api/api'
 import Bscroll from 'better-scroll'
 
 export default {
-  data () {
-    return {
-      seller: {},
-      collection: false,
-      scroll: null
-    }
-  },
   components: {
     Star,
     Split
   },
+  props: {
+    seller: {
+      type: Object,
+      default: () => {}
+    }
+  },
+  data () {
+    return {
+      collection: false
+    }
+  },
+  watch: {
+    seller (val, oldVal) {
+      if (val) {
+        this._initPicScroll()
+      }
+    }
+  },
+  computed: {
+    favoriteText () {
+      return this.collection ? '已收藏' : '收藏'
+    },
+    favoriteClass () {
+      return this.collection ? 'red-heart' : ''
+    }
+  },
   created () {
-    getSellerData().then(res => {
-      res = res.data
-      this.seller = res.result
-      this._initPicScroll()
-    })
     if (localStorage.getItem('collection') !== null) {
-      this.collection = localStorage.getItem('collection')
+      this.collection = JSON.parse(localStorage.getItem('collection'))
     }
   },
   methods: {
@@ -92,8 +105,9 @@ export default {
       return iconArr[index]
     },
     changeCollection () {
-      localStorage.setItem('collection', !this.collection)
       this.collection = !this.collection
+      let jsonCollection = JSON.stringify(this.collection)
+      localStorage.setItem('collection', jsonCollection)
     },
     _initPicScroll () {
       if (this.seller.pics) {
@@ -101,16 +115,18 @@ export default {
         let margin = 6
         let width = (picWidth + margin) * this.seller.pics.length - margin
         this.$refs.content.style.width = width + 'px'
-        if (!this.scroll) {
-          this.scroll = new Bscroll(this.$refs.wrapper, {
-            scrollX: true,
-            scrollY: false,
-            // 纵向的滚动还是保留原生滚动
-            eventPassthrough: 'vertical'
-          })
-        } else {
-          this.scroll.refresh()
-        }
+        this.$nextTick(() => {
+          if (!this.scroll) {
+            this.scroll = new Bscroll(this.$refs.wrapper, {
+              scrollX: true,
+              scrollY: false,
+              // 纵向的滚动还是保留原生滚动
+              eventPassthrough: 'vertical'
+            })
+          } else {
+            this.scroll.refresh()
+          }
+        })
       }
     }
   }
@@ -162,7 +178,7 @@ export default {
           .icon-heart-fill {
             font-size: 24px;
           }
-          .collection {
+          .red-heart {
             color: rgb(240,20,20);
           }
         }

@@ -20,7 +20,8 @@
               <span class="current-price">￥<span>{{food.price}}</span></span>
               <span class="previous-price" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
             </div>
-            <div class="button">加入购物车</div>
+            <div v-if="!food.count" class="button" @click="addCart">加入购物车</div>
+            <cart-control v-else :food="food"></cart-control>
           </div>
         </div>
         <split></split>
@@ -62,9 +63,15 @@
 <script>
 import RatingsFilter from './RatingsFilter'
 import Split from './Split'
+import CartControl from './CartControl'
 import { formatDate } from '../../static/js/util'
 import Bscroll from 'better-scroll'
 export default {
+  components: {
+    RatingsFilter,
+    Split,
+    CartControl
+  },
   props: {
     food: {
       type: Object,
@@ -87,10 +94,6 @@ export default {
       showFlag: false,
       scroll: null
     }
-  },
-  components: {
-    RatingsFilter,
-    Split
   },
   created () {
     this._initScroll()
@@ -119,6 +122,9 @@ export default {
     },
     show () {
       this.showFlag = true
+    },
+    addCart () {
+      this.$set(this.food, 'count', 1)
     },
     _initScroll () {
       this.$nextTick(() => {

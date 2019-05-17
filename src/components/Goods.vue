@@ -6,6 +6,7 @@
           <span class="item-des">
             <span v-if="item.type > 0" :class="['icon',iconMap(item.type)]"></span>{{item.name}}
           </span>
+          <bubble class="left-num" v-if="countList[index]" :num="countList[index]"></bubble>
         </li>
       </ul>
     </div>
@@ -35,7 +36,7 @@
       </div>
     </div>
     <food :food="selectedFood" ref="food"></food>
-    <seller-footer :selectFoods="selectFoods" ref="footer"></seller-footer>
+    <seller-footer :selectFoods="selectFoods" :minPrice="seller.minPrice" :deliveryPrice="seller.deliveryPrice" ref="footer"></seller-footer>
   </div>
 </template>
 
@@ -43,22 +44,31 @@
 import { getGoodsData } from '../api/api'
 import CartControl from './CartControl'
 import Food from './Food'
+import Bubble from './Bubble'
 import SellerFooter from './SellerFooter'
 import Bscroll from 'better-scroll'
 
 export default {
+  components: {
+    CartControl,
+    Food,
+    Bubble,
+    SellerFooter
+  },
+  props: {
+    seller: {
+      type: Object,
+      default: () => {}
+    }
+  },
   data () {
     return {
       goods: [],
       selectedFood: {},
       listHeight: [],
-      scrollY: 0
+      scrollY: 0,
+      countList: []
     }
-  },
-  components: {
-    CartControl,
-    Food,
-    SellerFooter
   },
   computed: {
     currentIndex () {
@@ -73,17 +83,23 @@ export default {
     },
     selectFoods () {
       let foods = []
-      for (let i = 0; i < this.goods.length; i++) {
-        let good = this.goods[i]
-        if (good.count > 0) {
-          foods.push(good)
-        }
-      }
+      let that = this
+      that.countList = []
+      this.goods.forEach(item => {
+        item = item.foods
+        let temp = 0
+        item.forEach(food => {
+          if (food.count > 0) {
+            foods.push(food)
+            temp += food.count
+          }
+        })
+        that.countList.push(temp)
+      })
       return foods
     }
   },
   created () {
-    console.log(2222)
     getGoodsData().then(res => {
       res = res.data
       this.goods = res.result
@@ -143,7 +159,6 @@ export default {
       this.scrollY = this.listHeight[index]
     },
     changeFood (food, index, num) {
-      // console.log(food, index, num)
       this.goods[index][num] = food
     },
     increment (target) {
@@ -167,6 +182,7 @@ export default {
       // padding: 0 12px;
       box-sizing: border-box;
       .left-item {
+        position: relative;
         display: table;
         height: 54px;
         width: 100%;
@@ -209,6 +225,11 @@ export default {
               @include bg-img("header/" + "guarantee_2");
             }
           }
+        }
+        .left-num {
+          position: absolute;
+          top: 5px;
+          right: 5px;
         }
       }
     }

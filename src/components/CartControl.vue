@@ -1,6 +1,6 @@
 <template>
   <div class="count clearfix">
-    <i class="iconfont icon-minus-circle" @click.stop="decrease" v-show="food.count >= 1"></i>
+    <transition name="decrease"><i class="iconfont icon-minus-circle" @click.stop="decrease" v-show="food.count >= 1"></i></transition>
     <span class="num" v-show="food.count >= 1">{{food.count}}</span>
     <i class="iconfont icon-plus-circle-fill" @click.stop="add"></i>
   </div>
@@ -34,6 +34,26 @@ export default {
 
 <style lang="scss" scoped>
 .count {
+  .decrease-enter-active {
+    animation: bounce-in 0.5s linear;
+  }
+  .decrease-leave-active {
+    animation: bounce-in 0.5s linear reverse;
+  }
+  @keyframes bounce-in {
+    0% {
+      transform: translateX(100%) rotate(0deg);
+      opacity: 0;
+    }
+    50% {
+      transform: translateX(50%) rotate(-90deg);
+      opacity: 0.5;
+    }
+    100% {
+      transform: translateX(0%) rotate(-180deg);
+      opacity: 1;
+    }
+  }
   .iconfont {
     float: left;
     font-size: 24px;

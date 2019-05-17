@@ -3,55 +3,70 @@
     <div class="footer" @click="showCheckList">
       <div tab="div" class="left">
         <div class="cart-wrapper">
-          <div class="cart">
-            <i class="iconfont icon-cart"></i>
+          <div class="cart" :style="{'background-color': selectNum > 0 ? 'rgb(0, 160, 220)' : '' }">
+            <i class="iconfont icon-cart" :style="{'color': selectNum > 0 ? '#fff' : '' }"></i>
+            <bubble class="total-num" v-if="selectNum > 0" :num="selectNum"></bubble>
           </div>
         </div>
         <div class="check">
-          <div class="food-cost">￥0</div>
-          <div class="delivery-cost">另需配送费￥4元</div>
+          <div class="food-cost">￥{{totalPrice}}</div>
+          <div class="delivery-cost">另需配送费￥{{deliveryPrice}}元</div>
         </div>
       </div>
-      <div class="pay-button"><div class="pay">￥20起送</div></div>
+      <div class="pay-button"><div class="pay" :class="buyClass" @click.stop="pay">{{buydes}}</div></div>
     </div>
-    <div class="check-list" v-show="show">
-      <div class="content">
-        <div class="header border-1px">
-          <span class="left">购物车</span>
-          <span class="right">清空</span>
-        </div>
-        <div class="list-wrapper" ref="list">
-          <ul class="list">
-            <li class="item border-1px">
-              <div class="food-name">莲子核桃黑米粥</div>
-              <div class="check-info">
-                <span class="price">￥<span class="price-num">10</span></span>
-                <div class="count">
-                  <i class="iconfont icon-minus-circle"></i>
-                  <span class="num">0</span>
-                  <i class="iconfont icon-plus-circle-fill"></i>
+    <div class="check-list" v-show="show" @click="closeList">
+      <transition name="list">
+        <div class="content">
+          <div class="header border-1px">
+            <span class="left">购物车</span>
+            <span class="right" @click="clear">清空</span>
+          </div>
+          <div class="list-wrapper" ref="list">
+            <ul class="list">
+              <li class="item border-1px" v-for="(food, index) in selectFoods" :key="index">
+                <div class="food-name">{{food.name}}</div>
+                <div class="check-info">
+                  <span class="price">￥<span class="price-num">{{food.count * food.price}}</span></span>
+                  <cart-control :food="food"></cart-control>
                 </div>
-              </div>
-            </li>
-          </ul>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
-      <div class="pay" v-if="payFlag">
-        <div class="pay-content clearfix">
-          <div class="title">支付</div>
-          <div class="des">您需要支付20元</div>
-          <div class="confirm border-1px" @click="confirm">确定</div>
-        </div>
+      </transition>
+    </div>
+    <div class="pay-tips" v-if="payFlag">
+      <div class="pay-content clearfix">
+        <div class="title">支付</div>
+        <div class="des">您需要支付20元</div>
+        <div class="confirm border-1px" @click="confirm">确定</div>
       </div>
     </div>
+    <v-dialog v-if="showDialog" :title="title" @cancle="cancle" @affirm="affirm"></v-dialog>
   </div>
 </template>
 
 <script>
-import BScroll from 'better-scroll'
 import CartControl from './CartControl'
+import Bubble from './Bubble'
+import Dialog from './Dialog'
+import BScroll from 'better-scroll'
 export default {
+  components: {
+    CartControl,
+    Bubble,
+    'v-dialog': Dialog
+  },
   props: {
+    minPrice: {
+      type: Number,
+      default: 0
+    },
+    deliveryPrice: {
+      type: Number,
+      default: 0
+    },
     selectFoods: {
       type: Array,
       default: () => []
@@ -60,16 +75,55 @@ export default {
   data () {
     return {
       show: false,
-      payFlag: true
+      payFlag: false,
+      showDialog: false,
+      title: '清空购物车'
     }
   },
-  components: {
-    CartControl
+  watch: {
+    selectNum (val, oldVal) {
+      if (val === 0) {
+        this.show = false
+      }
+    }
+  },
+  computed: {
+    selectNum () {
+      let count = 0
+      this.selectFoods.forEach(food => {
+        count += food.count
+      })
+      return count
+    },
+    totalPrice () {
+      let price = 0
+      this.selectFoods.forEach(food => {
+        price += food.count * food.price
+      })
+      return price
+    },
+    buydes () {
+      if (this.totalPrice === 0) {
+        return `￥${this.minPrice}元起送`
+      } else if (this.totalPrice < this.minPrice) {
+        return `还差￥${this.minPrice - this.totalPrice}元起送`
+      } else {
+        return '去结算'
+      }
+    },
+    buyClass () {
+      if (this.totalPrice < this.minPrice) {
+        return 'not-buy'
+      } else {
+        return 'buy'
+      }
+    }
   },
   mounted () {
     if (!this.scroll) {
       this.scroll = new BScroll(this.$refs.list, {
-        click: true
+        click: true,
+        mouseWheel: true
       })
     } else {
       this.scroll.refresh()
@@ -77,10 +131,36 @@ export default {
   },
   methods: {
     showCheckList () {
+      if (this.selectNum === 0) {
+        return
+      }
       this.show = !this.show
     },
     confirm () {
       this.payFlag = false
+    },
+    clear () {
+      this.showDialog = true
+    },
+    pay () {
+      if (this.totalPrice >= this.minPrice) {
+        this.payFlag = true
+      }
+    },
+    closeList (e) {
+      let checkList = document.querySelector('.check-list')
+      if (e.target === checkList) {
+        this.show = false
+      }
+    },
+    cancle () {
+      this.showDialog = false
+    },
+    affirm () {
+      this.showDialog = false
+      this.selectFoods.forEach(food => {
+        food.count = 0
+      })
     }
   }
 }
@@ -127,6 +207,11 @@ export default {
             color: rgb(128, 138, 133);
 
           }
+          .total-num {
+            position: absolute;
+            top: -10px;
+            right: 0;
+          }
         }
       }
       .check {
@@ -153,14 +238,21 @@ export default {
     }
     .pay-button {
       width: 105px;
-      background-color: rgb(43, 51, 59);
       .pay {
         text-align: center;
         font-size: 12px;
         line-height: 24px;
-        color: rgba(255,255,255,0.4);
+
         font-weight: 700;
         padding: 12px 0;
+        &.not-buy {
+          background-color: rgb(43, 51, 59);
+          color: rgba(255,255,255,0.4);
+        }
+        &.buy {
+          background-color: #31c56a;
+          color: #fff;
+        }
       }
     }
   }
@@ -171,7 +263,13 @@ export default {
     left: 0;
     bottom: 48px;
     background-color: rgba(7, 17, 27, 0.6);
-    // filter: blur(10px);
+    .list-enter-active, .list-leave-active {
+      transition: all 3s linear;
+    }
+    .list-enter, .list-leave-to {
+      transform: translateY(100%);
+      opacity: 0;
+    }
     .content {
       position: absolute;
       bottom: 0;
@@ -248,38 +346,40 @@ export default {
         }
       }
     }
-    .pay {
+  }
+    .pay-tips {
       z-index: 2;
-      position: relative;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(7, 17, 27, 0.4);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(7, 17, 27, 0.7);
       .pay-content {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         text-align: center;
-        width: 250px;
-        font-size: 14px;
+        width: 270px;
+        font-size: 16px;
         border-radius: 3px;
         background-color: #fff;
         .title {
           color: #000;
-          padding-top: 20px;
+          padding-top: 30px;
         }
         .des {
-          font-size: 12px;
-          color: rgb(218, 218, 218);
-          padding: 10px 0;
+          font-size: 14px;
+          color: rgb(156, 156, 156);
+          padding: 20px 0;
         }
         .confirm {
           @include border-top-1px(#ccc);
           color: rgb(252, 145, 83);
-          line-height: 40px;
+          line-height: 50px;
         }
       }
-    }
   }
 }
 </style>
