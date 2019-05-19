@@ -28,14 +28,14 @@
                   <span class="current-price">￥<span class="num">{{food.price}}</span></span>
                   <span class="old-price" v-if="food.oldPrice">￥<span class="num">{{food.oldPrice}}</span></span>
                 </div>
-                <cart-control :food="food" :increment="increment"></cart-control>
+                <cart-control :food="food" @increment="onAdd"></cart-control>
               </div>
             </div>
           </dd>
         </dl>
       </div>
     </div>
-    <food :food="selectedFood" ref="food"></food>
+    <food :food="selectedFood" ref="food" @increment="onAdd"></food>
     <seller-footer :selectFoods="selectFoods" :minPrice="seller.minPrice" :deliveryPrice="seller.deliveryPrice" ref="footer"></seller-footer>
   </div>
 </template>
@@ -161,7 +161,7 @@ export default {
     changeFood (food, index, num) {
       this.goods[index][num] = food
     },
-    increment (target) {
+    onAdd (target) {
       this.$refs.footer.drop(target)
     }
   }

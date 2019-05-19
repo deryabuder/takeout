@@ -15,7 +15,7 @@ export default {
     }
   },
   methods: {
-    add () {
+    add (event) {
       if (!this.food.count) {
         this.$set(this.food, 'count', 1)
       } else {

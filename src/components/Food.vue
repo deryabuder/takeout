@@ -21,7 +21,7 @@
               <span class="previous-price" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
             </div>
             <div v-if="!food.count" class="button" @click="addCart">加入购物车</div>
-            <cart-control v-else :food="food"></cart-control>
+            <cart-control v-else :food="food" @increment="onAdd"></cart-control>
           </div>
         </div>
         <split></split>
@@ -125,6 +125,9 @@ export default {
     },
     addCart () {
       this.$set(this.food, 'count', 1)
+    },
+    onAdd (target) {
+      this.$emit('increment', target)
     },
     _initScroll () {
       this.$nextTick(() => {

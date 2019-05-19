@@ -80,6 +80,7 @@ export default {
     }
   },
   watch: {
+    // 第一次载入是seller会发生变化
     seller (val, oldVal) {
       if (val) {
         this._initPicScroll()
@@ -97,6 +98,12 @@ export default {
   created () {
     if (localStorage.getItem('collection') !== null) {
       this.collection = JSON.parse(localStorage.getItem('collection'))
+    }
+  },
+  mounted () {
+    // 每次切换路由，再切换回来，会再执行一次生命周期函数，而seller在第一次载入时已经得到了
+    if (this.seller) {
+      this._initPicScroll()
     }
   },
   methods: {
