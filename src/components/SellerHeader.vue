@@ -7,7 +7,7 @@
           <div class="title clearfix"><span class="seller-img"/><span class="seller-name">{{seller.name}}</span></div>
           <div class="delivery">{{seller.description}} / {{seller.deliveryTime}}分钟送达</div>
           <div class="discount-wrapper">
-            <div class="discount"><span :class="['discount-img', iconMap(seller.supports[0].type)]"></span><span class="discount-content">{{seller.supports[0].description}}</span></div>
+            <div class="discount"><span class="discount-img" :class="iconMap(seller.supports[0].type)"></span><span class="discount-content">{{seller.supports[0].description}}</span></div>
           </div>
         </div>
         <div class="discount-num" @click="show">5个<i class="iconfont icon-right"></i></div>

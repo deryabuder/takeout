@@ -32,7 +32,7 @@ export default {
 <style lang="scss" scoped>
 @import '../../static/css/mixin';
   .dialog {
-    z-index: 2;
+    z-index: 1;
     position: fixed;
     top: 0;
     left: 0;

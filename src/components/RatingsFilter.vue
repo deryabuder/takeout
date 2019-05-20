@@ -113,6 +113,7 @@ export default {
     }
     .unlike {
       color: rgb(88,99,107);
+      background: rgb(160, 160, 160);
       &.active {
         background: rgb(102, 102, 102);
         color: #fff;

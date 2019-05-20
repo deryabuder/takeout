@@ -15,27 +15,29 @@
       </div>
       <div class="pay-button"><div class="pay" :class="buyClass" @click.stop="pay">{{buydes}}</div></div>
     </div>
-    <div class="check-list" v-show="show" @click="closeList">
-      <transition name="list">
-        <div class="content">
-          <div class="header border-1px">
-            <span class="left">购物车</span>
-            <span class="right" @click="clear">清空</span>
-          </div>
-          <div class="list-wrapper" ref="list">
-            <ul class="list">
-              <li class="item border-1px" v-for="(food, index) in selectFoods" :key="index">
-                <div class="food-name">{{food.name}}</div>
-                <div class="check-info">
-                  <span class="price">￥<span class="price-num">{{food.count * food.price}}</span></span>
-                  <cart-control :food="food" @increment="drop"></cart-control>
-                </div>
-              </li>
-            </ul>
-          </div>
+    <transition name="fade">
+      <div class="check-bg" v-show="show" @click="closeList">
+      </div>
+    </transition>
+    <transition name="list">
+      <div class="content" v-show="show">
+        <div class="header border-1px">
+          <span class="left">购物车</span>
+          <span class="right" @click="clear">清空</span>
         </div>
-      </transition>
-    </div>
+        <div class="list-wrapper" ref="list">
+          <ul class="list">
+            <li class="item border-1px" v-for="(food, index) in selectFoods" :key="index">
+              <div class="food-name">{{food.name}}</div>
+              <div class="check-info">
+                <span class="price">￥<span class="price-num">{{food.count * food.price}}</span></span>
+                <cart-control :food="food" @increment="drop"></cart-control>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </transition>
     <div class="pay-tips" v-if="payFlag">
       <div class="pay-content clearfix">
         <div class="title">支付</div>
@@ -45,7 +47,7 @@
     </div>
     <v-dialog v-if="showDialog" :title="title" @cancle="cancle" @affirm="affirm"></v-dialog>
     <div class="ball-container">
-      <div v-for="(ball, index) in balls" :key="index">
+      <div v-for="(ball,index) in balls" :key="index">
         <transition
           @before-enter="beforeDrop"
           @enter="dropping"
@@ -54,7 +56,7 @@
             <div class="inner inner-hook"></div>
           </div>
         </transition>
-      </div>
+        </div>
     </div>
   </div>
 </template>
@@ -101,7 +103,8 @@ export default {
       payFlag: false,
       showDialog: false,
       title: '清空购物车',
-      balls: createBalls()
+      balls: createBalls(),
+      dropBalls: []
     }
   },
   watch: {
@@ -143,9 +146,6 @@ export default {
       }
     }
   },
-  created () {
-    this.dropBalls = []
-  },
   mounted () {
     if (!this.scroll) {
       this.scroll = new BScroll(this.$refs.list, {
@@ -175,10 +175,7 @@ export default {
       }
     },
     closeList (e) {
-      let checkList = document.querySelector('.check-list')
-      if (e.target === checkList) {
-        this.show = false
-      }
+      this.show = false
     },
     cancle () {
       this.showDialog = false
@@ -214,6 +211,7 @@ export default {
       // 动画开始前小球的位置，相对于小球的原始位置，x增加，y减少
       el.style.transform = el.style.webkitTransform = `translate3d(0,${y}px,0)`
       const inner = el.getElementsByClassName('inner-hook')[0] // 使用inner-hook类来单纯被js操作
+      console.log(x, y)
       inner.style.transform = inner.style.webkitTransform = `translate3d(${x}px,0,0)`
     },
     // 不写这个函数的话，ball的show始终为false
@@ -232,7 +230,6 @@ export default {
       // 因为ball是对象，因此修改ball也会修改balls
       const ball = this.dropBalls.shift()
       if (ball) {
-        el.style = ''
         ball.show = false
         el.style.display = 'none' // 隐藏小球
       }
@@ -250,11 +247,14 @@ export default {
   left: 0;
   right: 0;
   height: 48px;
-  background-color: rgb(19, 29, 38);
   .footer {
     display: flex;
     justify-content: space-between;
+    z-index: 3;
     .left {
+      flex: 1;
+      z-index: 2;
+      background-color: rgb(19, 29, 38);
       display: flex;
       .cart-wrapper {
         position: relative;
@@ -312,6 +312,7 @@ export default {
       }
     }
     .pay-button {
+      z-index: 2;
       width: 105px;
       .pay {
         text-align: center;
@@ -331,23 +332,30 @@ export default {
       }
     }
   }
-  .check-list {
+  .fade-enter-active,.fade-leave-active {
+    transition: all 0.2s linear;
+  }
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
+  }
+  .check-bg {
     position: fixed;
     top: 0;
     right: 0;
     left: 0;
     bottom: 48px;
     background-color: rgba(7, 17, 27, 0.6);
-    .list-enter-active, .list-leave-active {
-      transition: all 3s linear;
-    }
-    .list-enter, .list-leave-to {
-      transform: translateY(100%);
-      opacity: 0;
-    }
-    .content {
-      position: absolute;
-      bottom: 0;
+  }
+  .list-enter-active, .list-leave-active {
+    transition: all 0.2s linear;
+  }
+  .list-enter, .list-leave-to {
+    transform: translateY(100%);
+  }
+  .content {
+      z-index: 0;
+      position: fixed;
+      bottom: 48px;
       left: 0;
       right: 0;
       overflow: hidden;
@@ -420,7 +428,6 @@ export default {
           }
         }
       }
-    }
   }
   .pay-tips {
       z-index: 2;
@@ -463,13 +470,13 @@ export default {
       left: 30px;
       bottom: 20px;
       // 先运行一段慢速的负向动画，然后加速运行正向动画
-      transition: all 4s cubic-bezier(0.49, -0.29, 0.75, 0.41);
+      transition: all 0.4s cubic-bezier(0.49, -0.29, 0.75, 0.41);
       .inner {
         width: 16px;
         height: 16px;
         background-color:rgb(0, 160, 220);
         border-radius: 50%;
-        transition: all 4s linear;
+        transition: all 0.4s linear;
       }
     }
   }

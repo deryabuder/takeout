@@ -20,8 +20,8 @@
               <span class="current-price">￥<span>{{food.price}}</span></span>
               <span class="previous-price" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
             </div>
-            <div v-if="!food.count" class="button" @click="addCart">加入购物车</div>
-            <cart-control v-else :food="food" @increment="onAdd"></cart-control>
+            <div v-show="!food.count" class="button" @click="addCart">加入购物车</div>
+            <cart-control v-show="food.count" :food="food" @increment="onAdd"></cart-control>
           </div>
         </div>
         <split></split>
@@ -123,8 +123,9 @@ export default {
     show () {
       this.showFlag = true
     },
-    addCart () {
+    addCart (target) {
       this.$set(this.food, 'count', 1)
+      this.$emit('increment', target)
     },
     onAdd (target) {
       this.$emit('increment', target)
