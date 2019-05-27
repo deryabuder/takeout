@@ -7,7 +7,6 @@ Vue.use(Router)
 
 export default new Router({
   mode: 'history',
-  // 路由有问题
   routes: [
     {
       path: '/',

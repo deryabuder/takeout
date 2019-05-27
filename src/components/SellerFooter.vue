@@ -41,7 +41,7 @@
     <div class="pay-tips" v-if="payFlag">
       <div class="pay-content clearfix">
         <div class="title">支付</div>
-        <div class="des">您需要支付20元</div>
+        <div class="des">您需要支付{{totalPrice}}元</div>
         <div class="confirm border-1px" @click="confirm">确定</div>
       </div>
     </div>
@@ -211,7 +211,6 @@ export default {
       // 动画开始前小球的位置，相对于小球的原始位置，x增加，y减少
       el.style.transform = el.style.webkitTransform = `translate3d(0,${y}px,0)`
       const inner = el.getElementsByClassName('inner-hook')[0] // 使用inner-hook类来单纯被js操作
-      console.log(x, y)
       inner.style.transform = inner.style.webkitTransform = `translate3d(${x}px,0,0)`
     },
     // 不写这个函数的话，ball的show始终为false

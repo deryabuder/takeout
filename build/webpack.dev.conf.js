@@ -14,13 +14,6 @@ const apiRoutes = express.Router()
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
 
-const app = express()
-app.use('/api', apiRoutes)
-var appData = require('../static/data/data.json')
-var seller = appData.seller
-var goods = appData.goods
-var ratings = appData.ratings
-
 const devWebpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true })
@@ -50,26 +43,6 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     quiet: true, // necessary for FriendlyErrorsPlugin
     watchOptions: {
       poll: config.dev.poll,
-    },
-    before(app) {
-      app.get('/api/seller', (req, res) => {
-        res.json({
-          status: '200',
-          result: seller
-        })
-      })
-      app.get('/api/goods', (req, res) => {
-        res.json({
-          status: '200',
-          result: goods
-        })
-      })
-      app.get('/api/ratings', (req, res) => {
-        res.json({
-          status: '200',
-          result: ratings
-        })
-      })
     }
   },
   plugins: [
